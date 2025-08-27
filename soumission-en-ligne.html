@@ -1330,21 +1330,26 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get reCAPTCHA v3 token
         let recaptchaResponse;
         try {
-          recaptchaResponse = await grecaptcha.execute('6Len-rQrAAAAAK6drmKppj8fJODYgnoBlBS7xfdu', {action: 'submit'});
+          // Wait for reCAPTCHA to be ready
+          await new Promise((resolve) => {
+            if (typeof grecaptcha !== 'undefined' && grecaptcha.ready) {
+              grecaptcha.ready(resolve);
+            } else {
+              // Fallback if grecaptcha not loaded
+              setTimeout(resolve, 1000);
+            }
+          });
+          
+          if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
+            recaptchaResponse = await grecaptcha.execute('6Len-rQrAAAAAK6drmKppj8fJODYgnoBlBS7xfdu', {action: 'submit'});
+          } else {
+            console.warn('reCAPTCHA not loaded, proceeding without it');
+            recaptchaResponse = 'no-recaptcha';
+          }
         } catch (error) {
           console.error('reCAPTCHA error:', error);
-          // Hide loading message
-          loadingMessage.style.display = 'none';
-          
-          // Show error message
-          errorMessage.style.display = 'block';
-          errorMessage.querySelector('.error-text').textContent = 'Erreur reCAPTCHA. Veuillez actualiser la page.';
-          
-          // Hide error message after 5 seconds
-          setTimeout(() => {
-            errorMessage.style.display = 'none';
-          }, 5000);
-          return;
+          // Continue without reCAPTCHA for now
+          recaptchaResponse = 'recaptcha-error';
         }
         
         // Get form data

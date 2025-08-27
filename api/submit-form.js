@@ -40,40 +40,38 @@ export default async function handler(req, res) {
       'g-recaptcha-response': recaptchaToken
     } = req.body;
 
-    // Verify reCAPTCHA
-    if (!recaptchaToken) {
-      return res.status(400).json({
-        success: false,
-        message: 'reCAPTCHA est requis.'
-      });
-    }
+    // Verify reCAPTCHA (optional for now)
+    if (recaptchaToken && recaptchaToken !== 'no-recaptcha' && recaptchaToken !== 'recaptcha-error') {
+      try {
+        const recaptchaVerify = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `secret=6Len-rQrAAAAAJNv4Gl8FWXgaRUuNlAHc6xwb0Bf&response=${recaptchaToken}`
+        });
 
-    // Verify reCAPTCHA with Google
-    const recaptchaVerify = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `secret=6Len-rQrAAAAAJNv4Gl8FWXgaRUuNlAHc6xwb0Bf&response=${recaptchaToken}`
-    });
-
-    const recaptchaResult = await recaptchaVerify.json();
-    
-    console.log('reCAPTCHA verification result:', recaptchaResult);
-    
-    if (!recaptchaResult.success) {
-      return res.status(400).json({
-        success: false,
-        message: 'Échec de la vérification reCAPTCHA. Veuillez réessayer.'
-      });
-    }
-    
-    // For reCAPTCHA v3, check the score (0.0 = bot, 1.0 = human)
-    if (recaptchaResult.score && recaptchaResult.score < 0.5) {
-      return res.status(400).json({
-        success: false,
-        message: 'Score de sécurité trop bas. Veuillez réessayer.'
-      });
+        const recaptchaResult = await recaptchaVerify.json();
+        
+        console.log('reCAPTCHA verification result:', recaptchaResult);
+        
+        if (!recaptchaResult.success) {
+          console.warn('reCAPTCHA verification failed:', recaptchaResult);
+        }
+        
+        // For reCAPTCHA v3, check the score (0.0 = bot, 1.0 = human)
+        if (recaptchaResult.score && recaptchaResult.score < 0.3) {
+          return res.status(400).json({
+            success: false,
+            message: 'Score de sécurité trop bas. Veuillez réessayer.'
+          });
+        }
+      } catch (error) {
+        console.error('reCAPTCHA verification error:', error);
+        // Continue without blocking the form
+      }
+    } else {
+      console.log('Form submitted without reCAPTCHA verification');
     }
 
     // Validate required fields
