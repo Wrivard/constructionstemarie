@@ -1,7 +1,5 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export default async function handler(req, res) {
   // Add CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -38,8 +36,35 @@ export default async function handler(req, res) {
       'Contact-2-Phone': phone,
       'Contact-2-Select': service,
       'Contact-2-Radio': budget,
-      'Contact-2-Message': message
+      'Contact-2-Message': message,
+      'g-recaptcha-response': recaptchaToken
     } = req.body;
+
+    // Verify reCAPTCHA
+    if (!recaptchaToken) {
+      return res.status(400).json({
+        success: false,
+        message: 'reCAPTCHA est requis.'
+      });
+    }
+
+    // Verify reCAPTCHA with Google
+    const recaptchaVerify = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `secret=6Len-rQrAAAAAJNv4GI8FWXgaRUuNIAHc6xwbOBf&response=${recaptchaToken}`
+    });
+
+    const recaptchaResult = await recaptchaVerify.json();
+    
+    if (!recaptchaResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Échec de la vérification reCAPTCHA. Veuillez réessayer.'
+      });
+    }
 
     // Validate required fields
     if (!fullName || !email || !phone || !service || !budget || !message) {
@@ -58,6 +83,13 @@ export default async function handler(req, res) {
     };
 
     const formattedBudget = budgetMap[budget] || budget;
+
+    // Initialize Resend with error handling
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY environment variable is missing');
+    }
+    
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Create email content with emojis and clean formatting
     const emailContent = `
