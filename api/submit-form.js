@@ -3,6 +3,16 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
+  // Add CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Handle preflight request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ 
@@ -10,6 +20,15 @@ export default async function handler(req, res) {
       message: 'Méthode non autorisée. Utilisez POST.' 
     });
   }
+
+  // Debug logging
+  console.log('API endpoint called');
+  console.log('Request body:', req.body);
+  console.log('Environment variables:', {
+    hasResendKey: !!process.env.RESEND_API_KEY,
+    fromEmail: process.env.FROM_EMAIL,
+    toEmail: process.env.TO_EMAIL
+  });
 
   try {
     const {
@@ -211,9 +230,20 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Erreur du serveur:', error);
+    
+    // More specific error messages
+    let errorMessage = 'Erreur interne du serveur. Veuillez réessayer plus tard.';
+    
+    if (error.message.includes('RESEND_API_KEY')) {
+      errorMessage = 'Erreur de configuration: Clé API Resend manquante.';
+    } else if (error.message.includes('email')) {
+      errorMessage = 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer.';
+    }
+    
     res.status(500).json({
       success: false,
-      message: 'Erreur interne du serveur. Veuillez réessayer plus tard.'
+      message: errorMessage,
+      debug: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 }

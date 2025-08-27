@@ -31,6 +31,38 @@
   margin-top: 20px;
 }
 
+/* Fix white on white text issue */
+.form_input {
+  color: #333 !important;
+  background-color: white !important;
+}
+
+.form_input::placeholder {
+  color: #999 !important;
+}
+
+/* Fix dropdown text visibility */
+.w-select {
+  color: #333 !important;
+  background-color: white !important;
+}
+
+.w-select option {
+  color: #333 !important;
+  background-color: white !important;
+}
+
+/* Fix textarea text visibility */
+.form_input.is-text-area {
+  color: #333 !important;
+  background-color: white !important;
+}
+
+/* Ensure form labels are visible */
+.form_field-label {
+  color: white !important;
+}
+
 .form_loading {
   display: inline-flex;
   align-items: center;
