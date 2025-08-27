@@ -1,0 +1,17 @@
+{
+  "name": "construction-ste-marie",
+  "version": "1.0.0",
+  "description": "Construction Ste-Marie - Entrepreneur en rénovation résidentielle",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 3000 -o",
+    "dev": "live-server --port=3000 --open",
+    "live": "live-server --port=3000 --open",
+    "static": "http-server -p 3000 -o"
+  },
+  "keywords": ["construction", "renovation", "residential", "webflow"],
+  "author": "Construction Ste-Marie",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
