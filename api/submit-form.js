@@ -54,7 +54,7 @@ export default async function handler(req, res) {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `secret=6Len-rQrAAAAAJNv4GI8FWXgaRUuNIAHc6xwbOBf&response=${recaptchaToken}`
+      body: `secret=6Len-rQrAAAAAJNv4Gl8FWXgaRUuNlAHc6xwb0Bf&response=${recaptchaToken}`
     });
 
     const recaptchaResult = await recaptchaVerify.json();
