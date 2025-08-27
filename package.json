@@ -4,8 +4,7 @@
   "description": "Construction Ste-Marie website with email form integration",
   "main": "server.js",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "vercel build"
+    "dev": "vercel dev"
   },
   "dependencies": {
     "resend": "^2.0.0"
