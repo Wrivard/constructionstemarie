@@ -1302,7 +1302,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         try {
           // Send form data to our API
-          const response = await fetch('/api/submit-form', {
+          const response = await fetch('http://localhost:3000/api/submit-form', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1315,40 +1315,40 @@ document.addEventListener('DOMContentLoaded', function() {
           // Hide loading message
           loadingMessage.style.display = 'none';
           
-          if (result.success) {
-            // Show success message
-            successMessage.style.display = 'block';
-            form.reset();
+                      if (result.success) {
+              // Show success message
+              successMessage.style.display = 'block';
+              form.reset();
+              
+              // Hide success message after 5 seconds
+              setTimeout(() => {
+                successMessage.style.display = 'none';
+              }, 5000);
+            } else {
+              // Show error message
+              errorMessage.style.display = 'block';
+              errorMessage.querySelector('.error-text').textContent = result.message || 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer.';
+              
+              // Hide error message after 5 seconds
+              setTimeout(() => {
+                errorMessage.style.display = 'none';
+              }, 5000);
+            }
+                  } catch (error) {
+            console.error('Erreur:', error);
             
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-              successMessage.style.display = 'none';
-            }, 5000);
-          } else {
+            // Hide loading message
+            loadingMessage.style.display = 'none';
+            
             // Show error message
             errorMessage.style.display = 'block';
-            errorMessage.querySelector('.error-text').textContent = result.message || 'Une erreur est survenue lors de l\'envoi.';
+            errorMessage.querySelector('.error-text').textContent = 'Erreur de connexion. Veuillez réessayer.';
             
             // Hide error message after 5 seconds
             setTimeout(() => {
               errorMessage.style.display = 'none';
             }, 5000);
           }
-        } catch (error) {
-          console.error('Error:', error);
-          
-          // Hide loading message
-          loadingMessage.style.display = 'none';
-          
-          // Show error message
-          errorMessage.style.display = 'block';
-          errorMessage.querySelector('.error-text').textContent = 'Erreur de connexion. Veuillez réessayer.';
-          
-          // Hide error message after 5 seconds
-          setTimeout(() => {
-            errorMessage.style.display = 'none';
-          }, 5000);
-        }
       });
     });
   </script>

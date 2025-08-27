@@ -201,10 +201,10 @@ app.post('/api/submit-form', async (req, res) => {
     });
 
     if (error) {
-      console.error('Resend error:', error);
+      console.error('Erreur Resend:', error);
       return res.status(500).json({
         success: false,
-        message: 'Erreur lors de l\'envoi de l\'email.'
+        message: 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer plus tard.'
       });
     }
 
@@ -217,10 +217,10 @@ app.post('/api/submit-form', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Server error:', error);
+    console.error('Erreur du serveur:', error);
     res.status(500).json({
       success: false,
-      message: 'Erreur interne du serveur.'
+      message: 'Erreur interne du serveur. Veuillez réessayer plus tard.'
     });
   }
 });
