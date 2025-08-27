@@ -59,10 +59,20 @@ export default async function handler(req, res) {
 
     const recaptchaResult = await recaptchaVerify.json();
     
+    console.log('reCAPTCHA verification result:', recaptchaResult);
+    
     if (!recaptchaResult.success) {
       return res.status(400).json({
         success: false,
         message: 'Échec de la vérification reCAPTCHA. Veuillez réessayer.'
+      });
+    }
+    
+    // For reCAPTCHA v3, check the score (0.0 = bot, 1.0 = human)
+    if (recaptchaResult.score && recaptchaResult.score < 0.5) {
+      return res.status(400).json({
+        success: false,
+        message: 'Score de sécurité trop bas. Veuillez réessayer.'
       });
     }
 
