@@ -68,3 +68,7 @@ logs
 # Temporary files
 *.tmp
 *.temp
+
+# Documentation files (keep local only)
+README.md
+SETUP.md
