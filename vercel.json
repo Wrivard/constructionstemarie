@@ -1,44 +1,6 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/a-propos",
-      "destination": "/a-propos.html"
-    },
-    {
-      "source": "/soumission-en-ligne",
-      "destination": "/soumission-en-ligne.html"
-    },
-    {
-      "source": "/renovation-laval",
-      "destination": "/renovation-laval.html"
-    },
-    {
-      "source": "/renovation-terrebonne",
-      "destination": "/renovation-terrebonne.html"
-    },
-    {
-      "source": "/renovation-repentigny",
-      "destination": "/renovation-repentigny.html"
-    },
-    {
-      "source": "/renovation-joliette",
-      "destination": "/renovation-joliette.html"
-    },
-    {
-      "source": "/politique-de-cookie",
-      "destination": "/politique-de-cookie.html"
-    },
-    {
-      "source": "/services/renovation",
-      "destination": "/services/renovation.html"
-    },
-    {
-      "source": "/services/agrandissement-de-maison",
-      "destination": "/services/agrandissement-de-maison.html"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/(.*)",
