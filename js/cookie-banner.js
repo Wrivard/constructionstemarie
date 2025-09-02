@@ -147,8 +147,8 @@ class CookieBanner {
           </div>
           <button onclick="cookieBanner.closePreferences()" class="cookie-modal-close" aria-label="Fermer">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
           </button>
         </div>
@@ -165,7 +165,7 @@ class CookieBanner {
                 <div class="cookie-category-info">
                   <div class="cookie-category-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                      <path d="12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     </svg>
                   </div>
                   <div>
@@ -173,9 +173,9 @@ class CookieBanner {
                       <h4>Cookies Nécessaires</h4>
                       <div class="cookie-info-tooltip">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <path d="m9,9 0,0 a3,3 0 1,1 6,0c0,2 -3,3 -3,3"></path>
-                          <path d="m9,17 0,1 6,0 0,-1"></path>
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="M9,9a3,3 0 0,1 6,0c0,2-3,3-3,3"/>
+                          <path d="M12,17h.01"/>
                         </svg>
                         <div class="tooltip-content">
                           <p><strong>Exemples:</strong></p>
@@ -196,8 +196,8 @@ class CookieBanner {
                 <div class="cookie-category-info">
                   <div class="cookie-category-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M12 20h9"></path>
-                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                      <path d="M12 20h9"/>
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
                     </svg>
                   </div>
                   <div>
@@ -218,10 +218,10 @@ class CookieBanner {
                 <div class="cookie-category-info">
                   <div class="cookie-category-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M3 3v5h5"></path>
-                      <path d="M3 8a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 4"></path>
-                      <path d="M21 21v-5h-5"></path>
-                      <path d="M21 16a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 20"></path>
+                      <path d="M3 3v5h5"/>
+                      <path d="M3 8a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 4"/>
+                      <path d="M21 21v-5h-5"/>
+                      <path d="M21 16a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 20"/>
                     </svg>
                   </div>
                   <div>
@@ -242,9 +242,9 @@ class CookieBanner {
                 <div class="cookie-category-info">
                   <div class="cookie-category-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="3"></circle>
-                      <path d="M12 1v6m0 6v6"></path>
-                      <path d="m21 12-6 0m-6 0-6 0"></path>
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M12 1v6m0 6v6"/>
+                      <path d="M21 12h-6m-6 0H3"/>
                     </svg>
                   </div>
                   <div>
@@ -278,8 +278,8 @@ class CookieBanner {
       <div class="cookie-banner">
         <button onclick="cookieBanner.closeBanner()" class="cookie-banner-close" aria-label="Fermer">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
 
