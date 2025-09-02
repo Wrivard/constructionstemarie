@@ -1,6 +1,64 @@
-import { Resend } from 'resend';
+const express = require('express');
+const path = require('path');
+const { Resend } = require('resend');
 
-export default async function handler(req, res) {
+const app = express();
+const PORT = 3000;
+
+// Environment variables for local development
+const RESEND_API_KEY = 're_Hn66szAL_H1Y6c6jGPC8n8ems6Kwqx9ji';
+const FROM_EMAIL = 'noreply@construction-ste-marie.com';
+const RECAPTCHA_SECRET_KEY = '6Len-rQrAAAAAJNv4Gl8FWXgaRUuNlAHc6xwb0Bf';
+
+// Initialize Resend
+const resend = new Resend(RESEND_API_KEY);
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Clean URLs middleware - handle routes without .html
+app.get('/soumission-en-ligne', (req, res) => {
+  res.sendFile(path.join(__dirname, 'soumission-en-ligne.html'));
+});
+
+app.get('/a-propos', (req, res) => {
+  res.sendFile(path.join(__dirname, 'a-propos.html'));
+});
+
+app.get('/renovation-laval', (req, res) => {
+  res.sendFile(path.join(__dirname, 'renovation-laval.html'));
+});
+
+app.get('/renovation-terrebonne', (req, res) => {
+  res.sendFile(path.join(__dirname, 'renovation-terrebonne.html'));
+});
+
+app.get('/renovation-repentigny', (req, res) => {
+  res.sendFile(path.join(__dirname, 'renovation-repentigny.html'));
+});
+
+app.get('/renovation-joliette', (req, res) => {
+  res.sendFile(path.join(__dirname, 'renovation-joliette.html'));
+});
+
+app.get('/politique-de-cookie', (req, res) => {
+  res.sendFile(path.join(__dirname, 'politique-de-cookie.html'));
+});
+
+app.get('/services/renovation', (req, res) => {
+  res.sendFile(path.join(__dirname, 'services/renovation.html'));
+});
+
+app.get('/services/agrandissement-de-maison', (req, res) => {
+  res.sendFile(path.join(__dirname, 'services/agrandissement-de-maison.html'));
+});
+
+// Static files (serve after clean URL routes)
+app.use(express.static('.'));
+
+// API endpoint - same as Vercel function
+app.post('/api/submit-form', async (req, res) => {
   // Add CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -11,22 +69,8 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ 
-      success: false, 
-      message: 'Méthode non autorisée. Utilisez POST.' 
-    });
-  }
-
-  // Debug logging
   console.log('API endpoint called');
   console.log('Request body:', req.body);
-  console.log('Environment variables:', {
-    hasResendKey: !!process.env.RESEND_API_KEY,
-    fromEmail: process.env.FROM_EMAIL,
-    toEmail: process.env.TO_EMAIL
-  });
 
   try {
     const {
@@ -40,7 +84,7 @@ export default async function handler(req, res) {
       'g-recaptcha-response': recaptchaToken
     } = req.body;
 
-    // Verify reCAPTCHA (optional for now)
+    // Verify reCAPTCHA (optional for local dev)
     if (recaptchaToken && recaptchaToken !== 'no-recaptcha' && recaptchaToken !== 'recaptcha-error') {
       try {
         const recaptchaVerify = await fetch('https://www.google.com/recaptcha/api/siteverify', {
@@ -48,18 +92,12 @@ export default async function handler(req, res) {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-          body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`
+          body: `secret=${RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`
         });
 
         const recaptchaResult = await recaptchaVerify.json();
-        
         console.log('reCAPTCHA verification result:', recaptchaResult);
         
-        if (!recaptchaResult.success) {
-          console.warn('reCAPTCHA verification failed:', recaptchaResult);
-        }
-        
-        // For reCAPTCHA v3, check the score (0.0 = bot, 1.0 = human)
         if (recaptchaResult.score && recaptchaResult.score < 0.3) {
           return res.status(400).json({
             success: false,
@@ -68,10 +106,7 @@ export default async function handler(req, res) {
         }
       } catch (error) {
         console.error('reCAPTCHA verification error:', error);
-        // Continue without blocking the form
       }
-    } else {
-      console.log('Form submitted without reCAPTCHA verification');
     }
 
     // Validate required fields
@@ -92,14 +127,7 @@ export default async function handler(req, res) {
 
     const formattedBudget = budgetMap[budget] || budget;
 
-    // Initialize Resend with error handling
-    if (!process.env.RESEND_API_KEY) {
-      throw new Error('RESEND_API_KEY environment variable is missing');
-    }
-    
-    const resend = new Resend(process.env.RESEND_API_KEY);
-
-    // Create email content with emojis and clean formatting
+    // Create email content
     const emailContent = `
       <!DOCTYPE html>
       <html>
@@ -245,11 +273,11 @@ export default async function handler(req, res) {
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@construction-ste-marie.com',
-      to: 'wrivard@kua.quebec', // Your business email (fixed)
+      from: FROM_EMAIL,
+      to: 'wrivard@kua.quebec',
       subject: `🏗️ Nouveau Projet - ${fullName} (${city}) - Construction Ste-Marie`,
       html: emailContent,
-      replyTo: email // Customer's email so you can reply directly
+      replyTo: email
     });
 
     if (error) {
@@ -270,20 +298,22 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Erreur du serveur:', error);
-    
-    // More specific error messages
-    let errorMessage = 'Erreur interne du serveur. Veuillez réessayer plus tard.';
-    
-    if (error.message.includes('RESEND_API_KEY')) {
-      errorMessage = 'Erreur de configuration: Clé API Resend manquante.';
-    } else if (error.message.includes('email')) {
-      errorMessage = 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer.';
-    }
-    
     res.status(500).json({
       success: false,
-      message: errorMessage,
-      debug: process.env.NODE_ENV === 'development' ? error.message : undefined
+      message: 'Erreur interne du serveur. Veuillez réessayer plus tard.'
     });
   }
-}
+});
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Local dev server is running' });
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Local development server running on http://localhost:${PORT}`);
+  console.log(`📧 Form page: http://localhost:${PORT}/soumission-en-ligne`);
+  console.log(`🔧 API endpoint: http://localhost:${PORT}/api/submit-form`);
+  console.log(`✨ Clean URLs enabled - no .html extensions needed!`);
+});
