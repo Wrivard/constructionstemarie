@@ -101,7 +101,7 @@ export default async function handler(req, res) {
     
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // Create email content with emojis and clean formatting
+    // Create email content with Construction Ste-Marie branding
     const emailContent = `
       <!DOCTYPE html>
       <html>
@@ -111,133 +111,202 @@ export default async function handler(req, res) {
           body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             line-height: 1.6; 
-            color: #333; 
+            color: #2c2c2c; 
             max-width: 600px; 
             margin: 0 auto; 
             padding: 20px;
-            background-color: #f8f9fa;
+            background-color: #f5f2ed;
           }
           .email-container {
-            background: white;
+            background: #ffffff;
             border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #007bff;
+            padding: 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
           }
           .header {
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            color: #ffffff;
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e9ecef;
+            padding: 40px 30px;
+            position: relative;
+          }
+          .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #c8a882 0%, #b8956f 100%);
           }
           .header h1 {
-            color: #007bff;
+            color: #ffffff;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          }
+          .header p {
             margin: 0;
-            font-size: 24px;
-            font-weight: 600;
+            color: #c8a882;
+            font-size: 16px;
+            font-weight: 500;
+          }
+          .content-wrapper {
+            padding: 30px;
           }
           .section {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #28a745;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #faf8f5;
+            border-radius: 10px;
+            border-left: 5px solid #c8a882;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
           }
           .section h3 {
-            color: #28a745;
+            color: #2c2c2c;
             margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 18px;
+            margin-bottom: 20px;
+            font-size: 20px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          }
+          .section h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: #c8a882;
+            border-radius: 2px;
           }
           .field {
             display: flex;
-            margin-bottom: 12px;
-            align-items: center;
+            margin-bottom: 15px;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid #e8e3dc;
+          }
+          .field:last-child {
+            border-bottom: none;
           }
           .field-label {
             font-weight: 600;
-            color: #495057;
-            min-width: 140px;
-            margin-right: 15px;
+            color: #2c2c2c;
+            min-width: 150px;
+            margin-right: 20px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
           }
           .field-value {
-            color: #212529;
+            color: #2c2c2c;
             flex: 1;
+            font-size: 16px;
+            font-weight: 500;
+          }
+          .highlight {
+            background: linear-gradient(120deg, #c8a882 0%, #b8956f 100%);
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
           }
           .message-box {
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid #dee2e6;
-            margin-top: 10px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e8e3dc;
+            margin-top: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #2c2c2c;
           }
           .footer {
             text-align: center;
             margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #e9ecef;
-            color: #6c757d;
-            font-size: 14px;
+            padding: 30px;
+            background: #2c2c2c;
+            color: #ffffff;
+            border-radius: 0 0 12px 12px;
           }
-          .highlight {
-            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 500;
+          .footer p {
+            margin: 10px 0;
+          }
+          .footer strong {
+            color: #c8a882;
+          }
+          .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #c8a882 0%, #b8956f 100%);
+            color: #ffffff;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 15px 0;
+            box-shadow: 0 4px 12px rgba(200, 168, 130, 0.3);
+          }
+          .brand-accent {
+            color: #c8a882;
+            font-weight: 600;
           }
         </style>
       </head>
       <body>
         <div class="email-container">
           <div class="header">
-            <h1>🏗️ Nouvelle Soumission - Construction Ste-Marie</h1>
-            <p style="margin: 0; color: #6c757d; font-size: 16px;">Un nouveau client souhaite un devis !</p>
+            <h1>🏗️ Nouvelle Soumission</h1>
+            <p>Construction Ste-Marie Inc. • Un nouveau projet vous attend !</p>
           </div>
           
-          <div class="section">
-            <h3>👤 Informations du Client</h3>
-            <div class="field">
-              <span class="field-label">📝 Nom complet :</span>
-              <span class="field-value highlight">${fullName}</span>
+          <div class="content-wrapper">
+            <div class="section">
+              <h3>👤 Informations du Client</h3>
+              <div class="field">
+                <span class="field-label">📝 Nom complet</span>
+                <span class="field-value highlight">${fullName}</span>
+              </div>
+              <div class="field">
+                <span class="field-label">🏙️ Ville</span>
+                <span class="field-value highlight">${city}</span>
+              </div>
+              <div class="field">
+                <span class="field-label">📧 Email</span>
+                <span class="field-value highlight">${email}</span>
+              </div>
+              <div class="field">
+                <span class="field-label">📱 Téléphone</span>
+                <span class="field-value highlight">${phone}</span>
+              </div>
             </div>
-            <div class="field">
-              <span class="field-label">🏙️ Ville :</span>
-              <span class="field-value highlight">${city}</span>
-            </div>
-            <div class="field">
-              <span class="field-label">📧 Email :</span>
-              <span class="field-value highlight">${email}</span>
-            </div>
-            <div class="field">
-              <span class="field-label">📱 Téléphone :</span>
-              <span class="field-value highlight">${phone}</span>
-            </div>
-          </div>
-          
-          <div class="section">
-            <h3>🔨 Détails du Projet</h3>
-            <div class="field">
-              <span class="field-label">🛠️ Service demandé :</span>
-              <span class="field-value highlight">${service}</span>
-            </div>
-            <div class="field">
-              <span class="field-label">💰 Budget estimé :</span>
-              <span class="field-value highlight">${formattedBudget}</span>
-            </div>
-            <div class="field">
-              <span class="field-label">💬 Message :</span>
-            </div>
-            <div class="message-box">
-              ${message}
+            
+            <div class="section">
+              <h3>🔨 Détails du Projet</h3>
+              <div class="field">
+                <span class="field-label">🛠️ Service demandé</span>
+                <span class="field-value highlight">${service}</span>
+              </div>
+              <div class="field">
+                <span class="field-label">💰 Budget estimé</span>
+                <span class="field-value highlight">${formattedBudget}</span>
+              </div>
+              <div class="field">
+                <span class="field-label">💬 Message du client</span>
+              </div>
+              <div class="message-box">
+                "${message}"
+              </div>
             </div>
           </div>
           
           <div class="footer">
-            <p>🚀 <strong>Prêt à transformer ce projet en réalité ?</strong></p>
-            <p>📧 Répondez directement à cet email pour contacter le client</p>
-            <p style="margin-top: 15px; font-size: 12px; color: #adb5bd;">
-              ✨ Envoyé depuis le formulaire de soumission en ligne de Construction Ste-Marie
+            <p><strong>🚀 Prêt à transformer ce projet en réalité ?</strong></p>
+            <a href="mailto:${email}" class="cta-button">📧 Répondre au Client</a>
+            <p style="margin-top: 20px; font-size: 12px; color: #c8a882;">
+              ✨ Envoyé depuis le formulaire de Construction Ste-Marie Inc.
             </p>
           </div>
         </div>
