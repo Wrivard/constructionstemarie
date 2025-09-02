@@ -36,8 +36,7 @@ project-root/
   "main": "server.js",
   "scripts": {
     "dev": "vercel dev",
-    "start": "vercel dev",
-    "test:email": "node verify-email.js"
+    "start": "vercel dev"
   },
   "dependencies": {
     "resend": "^2.0.0"
@@ -138,7 +137,7 @@ export default async function handler(req, res) {
     const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
     const businessEmail = 'your-business@email.com'; // Change this
 
-    // Create email content using table-based layout for compatibility
+    // Create email content (table-based for compatibility)
     const emailContent = `
       <!DOCTYPE html>
       <html>
@@ -260,13 +259,24 @@ export default async function handler(req, res) {
 
 ## 🎨 4. Modify Webflow Form
 
-### 4.1 Update Form JavaScript
-Add this script before the closing `</body>` tag in your form page:
+### 4.1 Update Form HTML
+In your form page HTML, find the form and update the action:
+
+```html
+<!-- Find your Webflow form and modify it -->
+<form id="wf-form-Contact-2-Form" name="wf-form-Contact-2-Form" data-name="Contact 2 Form" method="get" class="form" data-wf-page-id="your-page-id" data-wf-element-id="your-element-id">
+  <!-- Your existing form fields -->
+  <input type="submit" value="Submit" data-wait="Please wait..." class="button w-button">
+</form>
+```
+
+### 4.2 Add Form JavaScript
+Add this script before the closing `</body>` tag:
 
 ```html
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('wf-form-Contact-2-Form'); // Update with your form ID
+  const form = document.getElementById('wf-form-Contact-2-Form');
   const successMessage = document.querySelector('.w-form-done');
   const errorMessage = document.querySelector('.w-form-fail');
 
@@ -282,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       try {
-        // Submit to your API (use relative URL for Vercel)
+        // Submit to your API
         const response = await fetch('/api/submit-form', {
           method: 'POST',
           headers: {
@@ -313,16 +323,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 ```
-
-### 4.2 Form Fields Mapping
-Make sure your Webflow form field names match your API expectations:
-- `Contact-2-First-Name` → Full Name
-- `Contact-2-Last-Name` → City  
-- `Contact-2-Email-2` → Email
-- `Contact-2-Phone` → Phone
-- `Contact-2-Select` → Service
-- `Contact-2-Radio` → Budget
-- `Contact-2-Message` → Message
 
 ---
 
@@ -381,15 +381,14 @@ document.addEventListener('DOMContentLoaded', function() {
 ## 🧹 6. Console Cleanup (Optional)
 
 ### 6.1 Add Permissions Policy
-Add to `<head>` section of all pages:
+Add to `<head>` section:
 ```html
 <meta http-equiv="Permissions-Policy" content="interest-cohort=(), browsing-topics=(), attribution-reporting=(), run-ad-auction=(), join-ad-interest-group=(), private-state-token-issuance=(), private-aggregation=()">
 ```
 
 ### 6.2 Add Console Error Suppression
-Add before closing `</body>` on all pages:
+Add before closing `</body>`:
 ```html
-<!-- Console Error Suppression -->
 <script>
 // Suppress common console warnings that don't affect functionality
 const originalWarn = console.warn;
@@ -463,11 +462,6 @@ vercel --prod
 - Verify all environment variables are set
 - Check API code syntax
 
-**❌ Emails going to spam:**
-- Set up DNS records (SPF, DKIM, DMARC)
-- Use verified domain for FROM_EMAIL
-- Encourage users to mark as "not spam"
-
 ### Debug Tools:
 
 **Test API directly:**
@@ -480,11 +474,6 @@ curl -X POST https://your-site.vercel.app/api/submit-form \
 **Check Vercel logs:**
 - Vercel Dashboard → Functions → submit-form → Logs
 
-**Test email configuration:**
-```bash
-npm run test:email
-```
-
 ---
 
 ## ✅ 9. Final Checklist
@@ -494,7 +483,7 @@ npm run test:email
 - [ ] API endpoint created and tested
 - [ ] Form HTML updated with JavaScript
 - [ ] reCAPTCHA integrated (if needed)
-- [ ] Console cleanup applied to all pages
+- [ ] Console cleanup applied
 - [ ] Test form submission works
 - [ ] Business emails received
 - [ ] Confirmation emails sent
