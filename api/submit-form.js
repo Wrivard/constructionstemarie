@@ -101,222 +101,101 @@ export default async function handler(req, res) {
     
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // Create email content with Construction Ste-Marie branding
+    // Create simplified email content for better compatibility
     const emailContent = `
       <!DOCTYPE html>
       <html>
       <head>
         <meta charset="utf-8">
-        <style>
-          body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: 1.6; 
-            color: #2c2c2c; 
-            max-width: 600px; 
-            margin: 0 auto; 
-            padding: 20px;
-            background-color: #f5f2ed;
-          }
-          .email-container {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 0;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-          }
-          .header {
-            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
-            color: #ffffff;
-            text-align: center;
-            padding: 40px 30px;
-            position: relative;
-          }
-          .header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #c8a882 0%, #b8956f 100%);
-          }
-          .header h1 {
-            color: #ffffff;
-            margin: 0 0 10px 0;
-            font-size: 28px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-          }
-          .header p {
-            margin: 0;
-            color: #c8a882;
-            font-size: 16px;
-            font-weight: 500;
-          }
-          .content-wrapper {
-            padding: 30px;
-          }
-          .section {
-            margin-bottom: 30px;
-            padding: 25px;
-            background: #faf8f5;
-            border-radius: 10px;
-            border-left: 5px solid #c8a882;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-          }
-          .section h3 {
-            color: #2c2c2c;
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 20px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-          }
-          .section h3::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: #c8a882;
-            border-radius: 2px;
-          }
-          .field {
-            display: flex;
-            margin-bottom: 15px;
-            align-items: flex-start;
-            padding: 12px 0;
-            border-bottom: 1px solid #e8e3dc;
-          }
-          .field:last-child {
-            border-bottom: none;
-          }
-          .field-label {
-            font-weight: 600;
-            color: #2c2c2c;
-            min-width: 150px;
-            margin-right: 20px;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-          }
-          .field-value {
-            color: #2c2c2c;
-            flex: 1;
-            font-size: 16px;
-            font-weight: 500;
-          }
-          .highlight {
-            background: linear-gradient(120deg, #c8a882 0%, #b8956f 100%);
-            color: #ffffff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: 600;
-            display: inline-block;
-          }
-          .message-box {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            border: 2px solid #e8e3dc;
-            margin-top: 15px;
-            font-size: 16px;
-            line-height: 1.6;
-            color: #2c2c2c;
-          }
-          .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding: 30px;
-            background: #2c2c2c;
-            color: #ffffff;
-            border-radius: 0 0 12px 12px;
-          }
-          .footer p {
-            margin: 10px 0;
-          }
-          .footer strong {
-            color: #c8a882;
-          }
-          .cta-button {
-            display: inline-block;
-            background: #c8a882;
-            color: #2c2c2c;
-            padding: 12px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            margin: 20px 0;
-            border: none;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          }
-          .cta-button:hover {
-            background: #b8956f;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-          }
-          .brand-accent {
-            color: #c8a882;
-            font-weight: 600;
-          }
-        </style>
       </head>
-      <body>
-        <div class="email-container">
-          <div class="header">
-            <h1>🏗️ Nouvelle Soumission</h1>
-            <p>Construction Ste-Marie Inc. • Un nouveau projet vous attend !</p>
-          </div>
-          
-          <div class="content-wrapper">
-            <div class="section">
-              <h3>👤 Informations du Client</h3>
-              <div class="field">
-                <span class="field-label">📝 Nom complet</span>
-                <span class="field-value highlight">${fullName}</span>
-              </div>
-              <div class="field">
-                <span class="field-label">🏙️ Ville</span>
-                <span class="field-value highlight">${city}</span>
-              </div>
-              <div class="field">
-                <span class="field-label">📧 Email</span>
-                <span class="field-value highlight">${email}</span>
-              </div>
-              <div class="field">
-                <span class="field-label">📱 Téléphone</span>
-                <span class="field-value highlight">${phone}</span>
-              </div>
-            </div>
-            
-            <div class="section">
-              <h3>🔨 Détails du Projet</h3>
-              <div class="field">
-                <span class="field-label">🛠️ Service demandé</span>
-                <span class="field-value highlight">${service}</span>
-              </div>
-              <div class="field">
-                <span class="field-label">💰 Budget estimé</span>
-                <span class="field-value highlight">${formattedBudget}</span>
-              </div>
-              <div class="field">
-                <span class="field-label">💬 Message du client</span>
-              </div>
-              <div class="message-box">
-                "${message}"
-              </div>
-            </div>
-          </div>
-          
-          <div class="footer">
-            <a href="mailto:${email}" class="cta-button">Répondre au Client</a>
-            <p style="margin-top: 20px; font-size: 12px; color: #c8a882;">
-              ✨ Envoyé depuis le formulaire de Construction Ste-Marie Inc.
-            </p>
-          </div>
-        </div>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #2c2c2c; margin: 0; padding: 20px; background-color: #f5f2ed;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
+          <tr>
+            <td>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background: #2c2c2c; color: #ffffff; text-align: center; padding: 40px 30px; position: relative;">
+                    <h1 style="color: #ffffff; margin: 0 0 10px 0; font-size: 28px; font-weight: 700;">🏗️ Nouvelle Soumission</h1>
+                    <p style="margin: 0; color: #c8a882; font-size: 16px; font-weight: 500;">Construction Ste-Marie Inc. • Un nouveau projet vous attend !</p>
+                    <div style="height: 4px; background: #c8a882; margin-top: 20px;"></div>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 30px;">
+                    <!-- Client Info Section -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px; padding: 25px; background: #faf8f5; border-radius: 10px; border-left: 5px solid #c8a882;">
+                      <tr>
+                        <td>
+                          <h3 style="color: #2c2c2c; margin: 0 0 20px 0; font-size: 20px; font-weight: 600;">👤 Informations du Client</h3>
+                          
+                          <table width="100%" cellpadding="8" cellspacing="0">
+                            <tr>
+                              <td style="font-weight: 600; color: #2c2c2c; width: 150px; font-size: 14px;">📝 NOM COMPLET</td>
+                              <td style="background: #c8a882; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-weight: 600;">${fullName}</td>
+                            </tr>
+                            <tr>
+                              <td style="font-weight: 600; color: #2c2c2c; width: 150px; font-size: 14px;">🏙️ VILLE</td>
+                              <td style="background: #c8a882; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-weight: 600;">${city}</td>
+                            </tr>
+                            <tr>
+                              <td style="font-weight: 600; color: #2c2c2c; width: 150px; font-size: 14px;">📧 EMAIL</td>
+                              <td style="background: #c8a882; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-weight: 600;">${email}</td>
+                            </tr>
+                            <tr>
+                              <td style="font-weight: 600; color: #2c2c2c; width: 150px; font-size: 14px;">📱 TÉLÉPHONE</td>
+                              <td style="background: #c8a882; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-weight: 600;">${phone}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <!-- Project Details Section -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px; padding: 25px; background: #faf8f5; border-radius: 10px; border-left: 5px solid #c8a882;">
+                      <tr>
+                        <td>
+                          <h3 style="color: #2c2c2c; margin: 0 0 20px 0; font-size: 20px; font-weight: 600;">🔨 Détails du Projet</h3>
+                          
+                          <table width="100%" cellpadding="8" cellspacing="0">
+                            <tr>
+                              <td style="font-weight: 600; color: #2c2c2c; width: 150px; font-size: 14px;">🛠️ SERVICE DEMANDÉ</td>
+                              <td style="background: #c8a882; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-weight: 600;">${service}</td>
+                            </tr>
+                            <tr>
+                              <td style="font-weight: 600; color: #2c2c2c; width: 150px; font-size: 14px;">💰 BUDGET ESTIMÉ</td>
+                              <td style="background: #c8a882; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-weight: 600;">${formattedBudget}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" style="padding-top: 15px;">
+                                <strong style="font-weight: 600; color: #2c2c2c; font-size: 14px;">💬 MESSAGE DU CLIENT</strong>
+                                <div style="background: #ffffff; padding: 15px; border-radius: 8px; border: 2px solid #e8e3dc; margin-top: 10px; font-size: 16px; line-height: 1.6; color: #2c2c2c;">
+                                  "${message}"
+                                </div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="text-align: center; padding: 30px; background: #2c2c2c; color: #ffffff;">
+                    <a href="mailto:${email}" style="display: inline-block; background: #c8a882; color: #2c2c2c; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 20px 0; font-size: 16px;">Répondre au Client</a>
+                    <p style="margin: 20px 0 0 0; font-size: 12px; color: #c8a882;">
+                      ✨ Envoyé depuis le formulaire de Construction Ste-Marie Inc.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
       </body>
       </html>
     `;
@@ -370,66 +249,79 @@ export default async function handler(req, res) {
 
     console.log('✅ Email business envoyé avec succès:', data);
 
-    // Send confirmation email to the user
+    // Send confirmation email to the user - simplified for better compatibility
     const confirmationEmailContent = `
       <!DOCTYPE html>
       <html>
       <head>
         <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .email-container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #2c5530; color: white; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0; }
-          .content { background: #f8f9fa; padding: 30px 20px; border-radius: 0 0 8px 8px; }
-          .highlight { background: #e8f5e8; padding: 15px; border-radius: 6px; margin: 20px 0; }
-          .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 14px; }
-        </style>
       </head>
-      <body>
-        <div class="email-container">
-          <div class="header">
-            <h1>✅ Confirmation de Soumission</h1>
-            <p style="margin: 0; font-size: 18px;">Construction Ste-Marie Inc.</p>
-          </div>
-          
-          <div class="content">
-            <p>Bonjour <strong>${fullName}</strong>,</p>
-            
-            <p>🎉 <strong>Merci pour votre demande de soumission !</strong></p>
-            
-            <p>Nous avons bien reçu votre demande concernant :</p>
-            
-            <div class="highlight">
-              <p><strong>📋 Résumé de votre demande :</strong></p>
-              <p>🛠️ <strong>Service :</strong> ${service}</p>
-              <p>💰 <strong>Budget :</strong> ${formattedBudget}</p>
-              <p>🏙️ <strong>Localisation :</strong> ${city}</p>
-            </div>
-            
-            <p><strong>⏰ Prochaines étapes :</strong></p>
-            <ul>
-              <li>📞 Nous vous contacterons dans les <strong>24-48 heures</strong></li>
-              <li>📋 Nous discuterons de vos besoins en détail</li>
-              <li>📄 Nous vous fournirons une soumission détaillée</li>
-            </ul>
-            
-            <p>💡 <strong>En attendant</strong>, n'hésitez pas à :</p>
-            <ul>
-              <li>📸 Préparer des photos de votre projet</li>
-              <li>📝 Noter toutes vos questions</li>
-              <li>📏 Prendre des mesures si possible</li>
-            </ul>
-            
-            <div class="footer">
-              <p><strong>📧 Besoin de nous joindre ?</strong></p>
-              <p>Répondez simplement à cet email ou contactez-nous :</p>
-              <p>🌐 <strong>Site web :</strong> construction-ste-marie.com</p>
-              <p style="margin-top: 20px; font-size: 12px;">
-                ✨ Merci de faire confiance à Construction Ste-Marie Inc. pour votre projet !
-              </p>
-            </div>
-          </div>
-        </div>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #2c2c2c; margin: 0; padding: 20px; background-color: #f5f2ed;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
+          <tr>
+            <td>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background: #2c2c2c; color: #ffffff; text-align: center; padding: 40px 30px;">
+                    <h1 style="color: #ffffff; margin: 0 0 10px 0; font-size: 28px; font-weight: 700;">✅ Confirmation de Soumission</h1>
+                    <p style="margin: 0; color: #c8a882; font-size: 18px; font-weight: 500;">Construction Ste-Marie Inc.</p>
+                    <div style="height: 4px; background: #c8a882; margin-top: 20px;"></div>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <p style="margin: 0 0 20px 0; font-size: 18px;">Bonjour <strong style="color: #c8a882;">${fullName}</strong>,</p>
+                    
+                    <p style="margin: 0 0 20px 0; font-size: 18px; color: #2c2c2c;"><strong>🎉 Merci pour votre demande de soumission !</strong></p>
+                    
+                    <p style="margin: 0 0 20px 0; font-size: 16px;">Nous avons bien reçu votre demande concernant :</p>
+                    
+                    <!-- Summary Box -->
+                    <table width="100%" cellpadding="20" cellspacing="0" style="background: #faf8f5; border-radius: 10px; border-left: 5px solid #c8a882; margin: 20px 0;">
+                      <tr>
+                        <td>
+                          <p style="margin: 0 0 15px 0; font-size: 16px; font-weight: 600; color: #2c2c2c;">📋 Résumé de votre demande :</p>
+                          <p style="margin: 0 0 10px 0; font-size: 16px;"><strong>🛠️ Service :</strong> <span style="color: #c8a882; font-weight: 600;">${service}</span></p>
+                          <p style="margin: 0 0 10px 0; font-size: 16px;"><strong>💰 Budget :</strong> <span style="color: #c8a882; font-weight: 600;">${formattedBudget}</span></p>
+                          <p style="margin: 0; font-size: 16px;"><strong>🏙️ Localisation :</strong> <span style="color: #c8a882; font-weight: 600;">${city}</span></p>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <p style="margin: 20px 0 10px 0; font-size: 16px; font-weight: 600;">⏰ Prochaines étapes :</p>
+                    <table width="100%" cellpadding="5" cellspacing="0">
+                      <tr><td style="font-size: 16px;">📞 Nous vous contacterons dans les <strong>24-48 heures</strong></td></tr>
+                      <tr><td style="font-size: 16px;">📋 Nous discuterons de vos besoins en détail</td></tr>
+                      <tr><td style="font-size: 16px;">📄 Nous vous fournirons une soumission détaillée</td></tr>
+                    </table>
+                    
+                    <p style="margin: 20px 0 10px 0; font-size: 16px; font-weight: 600;">💡 En attendant, n'hésitez pas à :</p>
+                    <table width="100%" cellpadding="5" cellspacing="0">
+                      <tr><td style="font-size: 16px;">📸 Préparer des photos de votre projet</td></tr>
+                      <tr><td style="font-size: 16px;">📝 Noter toutes vos questions</td></tr>
+                      <tr><td style="font-size: 16px;">📏 Prendre des mesures si possible</td></tr>
+                    </table>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="text-align: center; padding: 30px; background: #2c2c2c; color: #ffffff;">
+                    <p style="margin: 0 0 10px 0; font-size: 16px; font-weight: 600; color: #c8a882;">📧 Besoin de nous joindre ?</p>
+                    <p style="margin: 0 0 10px 0; font-size: 14px;">Répondez simplement à cet email ou contactez-nous</p>
+                    <p style="margin: 0 0 20px 0; font-size: 14px;">🌐 <strong>Site web :</strong> construction-ste-marie.com</p>
+                    <p style="margin: 0; font-size: 12px; color: #c8a882;">
+                      ✨ Merci de faire confiance à Construction Ste-Marie Inc. pour votre projet !
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
       </body>
       </html>
     `;
