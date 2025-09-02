@@ -248,7 +248,7 @@ export default async function handler(req, res) {
     // Send email using Resend
     const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
     // Determine the correct business email (prioritize hard-coded over env var for this specific case)
-    const businessEmail = 'wrivard@kua.quebec';
+    const businessEmail = 'williamrivard@live.ca'; // Temporary: use verified email until wrivard@kua.quebec is verified in Resend
     
     // Log if there's an environment variable that might be interfering
     if (process.env.TO_EMAIL && process.env.TO_EMAIL !== businessEmail) {
