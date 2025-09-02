@@ -24,8 +24,10 @@ export default async function handler(req, res) {
   console.log('Request body:', req.body);
   console.log('Environment variables:', {
     hasResendKey: !!process.env.RESEND_API_KEY,
+    resendKeyLength: process.env.RESEND_API_KEY ? process.env.RESEND_API_KEY.length : 0,
     fromEmail: process.env.FROM_EMAIL,
-    toEmail: process.env.TO_EMAIL
+    nodeEnv: process.env.NODE_ENV,
+    hardCodedBusinessEmail: 'wrivard@kua.quebec'
   });
 
   try {
@@ -244,27 +246,166 @@ export default async function handler(req, res) {
     `;
 
     // Send email using Resend
+    const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
+    // Determine the correct business email (prioritize hard-coded over env var for this specific case)
+    const businessEmail = 'wrivard@kua.quebec';
+    
+    // Log if there's an environment variable that might be interfering
+    if (process.env.TO_EMAIL && process.env.TO_EMAIL !== businessEmail) {
+      console.log('⚠️  Warning: TO_EMAIL env var differs from hard-coded email:', {
+        envToEmail: process.env.TO_EMAIL,
+        hardCodedEmail: businessEmail,
+        usingEmail: businessEmail
+      });
+    }
+    
+    console.log('📧 Attempting to send email with config:', {
+      from: fromEmail,
+      to: businessEmail,
+      subject: `🏗️ Nouveau Projet - ${fullName} (${city}) - Construction Ste-Marie`,
+      replyTo: email,
+      contentLength: emailContent.length,
+      envToEmail: process.env.TO_EMAIL // Log if there's an env override
+    });
+
     const { data, error } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@construction-ste-marie.com',
-      to: 'wrivard@kua.quebec', // Your business email (fixed)
+      from: fromEmail,
+      to: businessEmail, // Your business email - hard-coded to ensure correct recipient
       subject: `🏗️ Nouveau Projet - ${fullName} (${city}) - Construction Ste-Marie`,
       html: emailContent,
       replyTo: email // Customer's email so you can reply directly
     });
 
     if (error) {
-      console.error('Erreur Resend:', error);
+      console.error('❌ Erreur Resend détaillée:', {
+        error,
+        errorMessage: error.message,
+        errorName: error.name,
+        fromEmail,
+        hasApiKey: !!process.env.RESEND_API_KEY
+      });
       return res.status(500).json({
         success: false,
-        message: 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer plus tard.'
+        message: 'Erreur lors de l\'envoi de l\'email. Veuillez réessayer plus tard.',
+        debug: process.env.NODE_ENV === 'development' ? error : undefined
       });
     }
 
-    console.log('Email envoyé avec succès:', data);
+    console.log('✅ Email business envoyé avec succès:', data);
+
+    // Send confirmation email to the user
+    const confirmationEmailContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .email-container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: #2c5530; color: white; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0; }
+          .content { background: #f8f9fa; padding: 30px 20px; border-radius: 0 0 8px 8px; }
+          .highlight { background: #e8f5e8; padding: 15px; border-radius: 6px; margin: 20px 0; }
+          .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="email-container">
+          <div class="header">
+            <h1>✅ Confirmation de Soumission</h1>
+            <p style="margin: 0; font-size: 18px;">Construction Ste-Marie Inc.</p>
+          </div>
+          
+          <div class="content">
+            <p>Bonjour <strong>${fullName}</strong>,</p>
+            
+            <p>🎉 <strong>Merci pour votre demande de soumission !</strong></p>
+            
+            <p>Nous avons bien reçu votre demande concernant :</p>
+            
+            <div class="highlight">
+              <p><strong>📋 Résumé de votre demande :</strong></p>
+              <p>🛠️ <strong>Service :</strong> ${service}</p>
+              <p>💰 <strong>Budget :</strong> ${formattedBudget}</p>
+              <p>🏙️ <strong>Localisation :</strong> ${city}</p>
+            </div>
+            
+            <p><strong>⏰ Prochaines étapes :</strong></p>
+            <ul>
+              <li>📞 Nous vous contacterons dans les <strong>24-48 heures</strong></li>
+              <li>📋 Nous discuterons de vos besoins en détail</li>
+              <li>📄 Nous vous fournirons une soumission détaillée</li>
+            </ul>
+            
+            <p>💡 <strong>En attendant</strong>, n'hésitez pas à :</p>
+            <ul>
+              <li>📸 Préparer des photos de votre projet</li>
+              <li>📝 Noter toutes vos questions</li>
+              <li>📏 Prendre des mesures si possible</li>
+            </ul>
+            
+            <div class="footer">
+              <p><strong>📧 Besoin de nous joindre ?</strong></p>
+              <p>Répondez simplement à cet email ou contactez-nous :</p>
+              <p>🌐 <strong>Site web :</strong> construction-ste-marie.com</p>
+              <p style="margin-top: 20px; font-size: 12px;">
+                ✨ Merci de faire confiance à Construction Ste-Marie Inc. pour votre projet !
+              </p>
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    // Send confirmation email with extensive logging
+    try {
+      console.log('📧 ===== CONFIRMATION EMAIL DEBUG =====');
+      console.log('📧 Customer email from form:', email);
+      console.log('📧 Email validation:', {
+        isValidEmail: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+        emailLength: email ? email.length : 0,
+        emailTrimmed: email ? email.trim() : 'N/A'
+      });
+      console.log('📧 From email:', fromEmail);
+      console.log('📧 Confirmation content length:', confirmationEmailContent.length);
+      
+      const confirmationResult = await resend.emails.send({
+        from: fromEmail,
+        to: email.trim(), // Send to the user's email (trimmed)
+        subject: `✅ Confirmation de soumission - Construction Ste-Marie`,
+        html: confirmationEmailContent,
+        replyTo: 'wrivard@kua.quebec'
+      });
+
+      console.log('📧 Resend confirmation response:', JSON.stringify(confirmationResult, null, 2));
+
+      if (confirmationResult.error) {
+        console.error('❌ CONFIRMATION EMAIL FAILED:', {
+          error: confirmationResult.error,
+          errorMessage: confirmationResult.error.message,
+          errorName: confirmationResult.error.name,
+          customerEmail: email,
+          fromEmail: fromEmail
+        });
+      } else {
+        console.log('✅ CONFIRMATION EMAIL SUCCESS:', {
+          emailId: confirmationResult.data?.id,
+          customerEmail: email,
+          data: confirmationResult.data
+        });
+      }
+    } catch (confirmationError) {
+      console.error('❌ CONFIRMATION EMAIL EXCEPTION:', {
+        error: confirmationError,
+        message: confirmationError.message,
+        stack: confirmationError.stack,
+        customerEmail: email
+      });
+    }
 
     res.status(200).json({
       success: true,
-      message: 'Votre soumission a été envoyée avec succès !',
+      message: 'Votre soumission a été envoyée avec succès ! Vous recevrez une confirmation par email.',
       data: data
     });
 
