@@ -240,14 +240,22 @@ export default async function handler(req, res) {
           }
           .cta-button {
             display: inline-block;
-            background: linear-gradient(135deg, #c8a882 0%, #b8956f 100%);
-            color: #ffffff;
-            padding: 12px 25px;
-            border-radius: 6px;
+            background: #c8a882;
+            color: #2c2c2c;
+            padding: 12px 24px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            margin: 15px 0;
-            box-shadow: 0 4px 12px rgba(200, 168, 130, 0.3);
+            margin: 20px 0;
+            border: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          }
+          .cta-button:hover {
+            background: #b8956f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
           }
           .brand-accent {
             color: #c8a882;
@@ -303,8 +311,7 @@ export default async function handler(req, res) {
           </div>
           
           <div class="footer">
-            <p><strong>🚀 Prêt à transformer ce projet en réalité ?</strong></p>
-            <a href="mailto:${email}" class="cta-button">📧 Répondre au Client</a>
+            <a href="mailto:${email}" class="cta-button">Répondre au Client</a>
             <p style="margin-top: 20px; font-size: 12px; color: #c8a882;">
               ✨ Envoyé depuis le formulaire de Construction Ste-Marie Inc.
             </p>
