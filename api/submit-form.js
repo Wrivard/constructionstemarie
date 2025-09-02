@@ -173,7 +173,7 @@ export default async function handler(req, res) {
                                 <strong style="font-weight: 600; color: #2c2c2c; font-size: 14px;">💬 MESSAGE DU CLIENT</strong>
                                 <div style="background: #ffffff; padding: 15px; border-radius: 8px; border: 2px solid #e8e3dc; margin-top: 10px; font-size: 16px; line-height: 1.6; color: #2c2c2c;">
                                   "${message}"
-                                </div>
+            </div>
                               </td>
                             </tr>
                           </table>
@@ -314,8 +314,8 @@ export default async function handler(req, res) {
                     <p style="margin: 0 0 10px 0; font-size: 14px;">Répondez simplement à cet email ou contactez-nous</p>
                     <p style="margin: 0 0 20px 0; font-size: 14px;">🌐 <strong>Site web :</strong> construction-ste-marie.com</p>
                     <p style="margin: 0; font-size: 12px; color: #c8a882;">
-                      ✨ Merci de faire confiance à Construction Ste-Marie Inc. pour votre projet !
-                    </p>
+                ✨ Merci de faire confiance à Construction Ste-Marie Inc. pour votre projet !
+              </p>
                   </td>
                 </tr>
               </table>
