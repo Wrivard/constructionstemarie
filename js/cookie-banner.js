@@ -165,7 +165,9 @@ class CookieBanner {
                 <div class="cookie-category-info">
                   <div class="cookie-category-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <circle cx="12" cy="16" r="1"/>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                     </svg>
                   </div>
                   <div>
@@ -174,8 +176,8 @@ class CookieBanner {
                       <div class="cookie-info-tooltip">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <circle cx="12" cy="12" r="10"/>
-                          <path d="M9,9a3,3 0 0,1 6,0c0,2-3,3-3,3"/>
-                          <path d="M12,17h.01"/>
+                          <path d="M12 16v-4"/>
+                          <path d="M12 8h.01"/>
                         </svg>
                         <div class="tooltip-content">
                           <p><strong>Exemples:</strong></p>
@@ -196,8 +198,11 @@ class CookieBanner {
                 <div class="cookie-category-info">
                   <div class="cookie-category-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M12 20h9"/>
-                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                      <path d="M9 12l2 2 4-4"/>
+                      <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                      <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                      <path d="M12 3c0 1-1 3-3 3s-3-2-3-3 1-3 3-3 3 2 3 3"/>
+                      <path d="M12 21c0-1-1-3-3-3s-3 2-3 3 1 3 3 3 3-2 3-3"/>
                     </svg>
                   </div>
                   <div>
@@ -218,10 +223,12 @@ class CookieBanner {
                 <div class="cookie-category-info">
                   <div class="cookie-category-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M3 3v5h5"/>
-                      <path d="M3 8a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 4"/>
-                      <path d="M21 21v-5h-5"/>
-                      <path d="M21 16a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 20"/>
+                      <path d="M3 3v18h18"/>
+                      <path d="M7 16l4-4 4 4 6-6"/>
+                      <circle cx="7" cy="16" r="1"/>
+                      <circle cx="11" cy="12" r="1"/>
+                      <circle cx="15" cy="16" r="1"/>
+                      <circle cx="21" cy="10" r="1"/>
                     </svg>
                   </div>
                   <div>
@@ -242,9 +249,13 @@ class CookieBanner {
                 <div class="cookie-category-info">
                   <div class="cookie-category-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                      <path d="M2 12h2"/>
+                      <path d="M6 8H2v8h4"/>
+                      <path d="M16 16v-4a2 2 0 0 0-2-2h-4"/>
                       <circle cx="12" cy="12" r="3"/>
-                      <path d="M12 1v6m0 6v6"/>
-                      <path d="M21 12h-6m-6 0H3"/>
+                      <path d="M12 9v6"/>
+                      <path d="M9 12h6"/>
                     </svg>
                   </div>
                   <div>
