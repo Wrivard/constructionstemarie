@@ -265,7 +265,8 @@ export default async function handler(req, res) {
       subject: `🏗️ Nouveau Projet - ${fullName} (${city}) - Construction Ste-Marie`,
       replyTo: email,
       contentLength: emailContent.length,
-      envToEmail: process.env.TO_EMAIL // Log if there's an env override
+      envToEmail: process.env.TO_EMAIL, // Log if there's an env override
+      deploymentCheck: 'FORCE_REDEPLOY_v2'
     });
 
     const { data, error } = await resend.emails.send({
