@@ -86,47 +86,12 @@
     color: #a69272;
   }
 
-  .error-404-links {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid #f0f0f0;
-  }
 
-  .error-404-links h4 {
-    color: #0d0d0d;
-    font-size: 1.125rem;
-    margin-bottom: 1rem;
-    font-weight: 600;
-  }
-
-  .error-404-link-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0.5rem;
-  }
-
-  .error-404-link {
-    color: #a69272;
-    text-decoration: none;
-    padding: 0.5rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-  }
-
-  .error-404-link:hover {
-    background: #f6f4f0;
-    color: #84745b;
-  }
 
   @media (max-width: 768px) {
     .error-404-container {
       padding: 2rem 1.5rem;
       margin: 1rem;
-    }
-    
-    .error-404-link-grid {
-      grid-template-columns: 1fr;
     }
   }
   </style>
@@ -145,7 +110,7 @@
           </div>
         </div>
         <nav role="navigation" class="navbar3_menu w-nav-menu">
-          <a href="#" class="navbar3_logo-link-menu w-nav-brand"><img loading="eager" src="images/Logo-wide.svg" alt="Construction Ste-Marie Logo" class="navbar3_logo"></a>
+          <a href="#" class="navbar3_logo-link-menu w-nav-brand"><img loading="eager" src="images/Logo-wide.svg" alt="" class="navbar3_logo"></a>
           <a href="/" class="navbar3_link w-nav-link">Accueil</a>
           <a href="/a-propos" class="navbar3_link w-nav-link">À Propos</a>
           <div data-delay="200" data-hover="true" class="navbar3_menu-dropdown w-dropdown">
@@ -160,10 +125,10 @@
               <a href="/services/agrandissement-de-maison" class="navbar3_dropdown-link w-dropdown-link">Agrandissement de maison</a>
             </nav>
           </div>
-          <a href="/soumission-en-ligne" class="navbar3_tablet-menu-button w-button">Soumettre</a>
+          <a href="#" class="navbar3_tablet-menu-button w-button">Soumettre</a>
         </nav>
-        <a href="/" class="navbar3_logo-link w-nav-brand"><img width="52" loading="lazy" alt="Construction Ste-Marie" src="images/logo_stmarie_1-removebg-preview.png" class="navbar3_logo"></a>
-        <a href="/soumission-en-ligne" class="button w-button">Soumission</a>
+        <a href="/" class="navbar3_logo-link w-nav-brand"><img width="52" loading="lazy" alt="" src="images/logo_stmarie_1-removebg-preview.png" class="navbar3_logo"></a>
+        <a id="w-node-_17adc30f-52ff-9af7-6c49-8b94272a5798-272a577a" href="/soumission-en-ligne" class="button w-button">Soumission</a>
         <div class="navbar3_menu-background"></div>
       </div>
     </div>
@@ -175,9 +140,10 @@
           <!-- Icône d'erreur -->
           <div class="error-404-icon">
             <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 8v4"/>
-              <path d="M12 16h.01"/>
+              <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>
+              <path d="M8 21v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4"/>
+              <path d="M9 9v2"/>
+              <path d="M15 9v2"/>
             </svg>
           </div>
 
@@ -195,16 +161,7 @@
 
 
 
-          <!-- Liens rapides -->
-          <div class="error-404-links">
-            <h4>Liens utiles</h4>
-            <div class="error-404-link-grid">
-              <a href="/a-propos" class="error-404-link">À Propos</a>
-              <a href="/services/renovation" class="error-404-link">Rénovation</a>
-              <a href="/services/agrandissement-de-maison" class="error-404-link">Agrandissement</a>
-              <a href="/politique-de-cookie" class="error-404-link">Politique de cookies</a>
-            </div>
-          </div>
+
         </div>
       </section>
     </main>
