@@ -3524,6 +3524,11 @@ figcaption {
     position: static;
   }
 
+  .navbar3_logo-link-menu .navbar3_logo {
+    max-width: 120px;
+    height: auto;
+  }
+
   .menu-icon3 {
     flex-direction: column;
     justify-content: center;
