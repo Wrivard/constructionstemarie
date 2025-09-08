@@ -3500,6 +3500,12 @@ figcaption {
     margin-left: 0;
     margin-right: 0;
     display: inline-block;
+    border: 1px solid var(--_primitives---colors--donkey-brown);
+    background-color: var(--_primitives---colors--donkey-brown);
+    color: var(--_primitives---colors--white);
+    text-align: center;
+    border-radius: 6px;
+    padding: .75rem 1.5rem;
   }
 
   .menu-icon3_line-bottom {
