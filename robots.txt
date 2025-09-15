@@ -15,7 +15,6 @@ Allow: /renovation-*.html
 # Block technical and non-content files
 Disallow: /css/
 Disallow: /js/
-Disallow: /images/
 Disallow: /style-guide-*.html
 Disallow: /401.html
 Disallow: /404.html
@@ -31,12 +30,8 @@ Disallow: /admin/
 Disallow: /temp/
 Disallow: /backup/
 
-# Allow important images for SEO
-Allow: /images/*.jpg
-Allow: /images/*.jpeg
-Allow: /images/*.png
-Allow: /images/*.svg
-Allow: /images/*.webp
+# Allow all images for SEO (removed blanket disallow)
+Allow: /images/
 
 # Sitemap locations
 Sitemap: https://constructionstemarie.com/sitemap.xml
