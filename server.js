@@ -193,7 +193,7 @@ app.post('/api/submit-form', async (req, res) => {
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@construction-ste-marie.com',
+      from: process.env.FROM_EMAIL || 'noreply@constructionstemarie.com',
       to: 'wrivard@kua.quebec', // Hard-coded business email
       subject: `🏗️ Nouveau Projet - ${fullName} (${city}) - Construction Ste-Marie`,
       html: emailContent,

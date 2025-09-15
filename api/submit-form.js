@@ -312,7 +312,7 @@ export default async function handler(req, res) {
                   <td style="text-align: center; padding: 30px; background: #2c2c2c; color: #ffffff;">
                     <p style="margin: 0 0 10px 0; font-size: 16px; font-weight: 600; color: #c8a882;">📧 Besoin de nous joindre ?</p>
                     <p style="margin: 0 0 10px 0; font-size: 14px;">Répondez simplement à cet email ou contactez-nous</p>
-                    <p style="margin: 0 0 20px 0; font-size: 14px;">🌐 <strong>Site web :</strong> construction-ste-marie.com</p>
+                    <p style="margin: 0 0 20px 0; font-size: 14px;">🌐 <strong>Site web :</strong> constructionstemarie.com</p>
                     <p style="margin: 0; font-size: 12px; color: #c8a882;">
                 ✨ Merci de faire confiance à Construction Ste-Marie Inc. pour votre projet !
               </p>

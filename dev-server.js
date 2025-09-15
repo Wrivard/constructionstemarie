@@ -291,7 +291,7 @@ app.post('/api/submit-form', async (req, res) => {
               <div class="footer">
                 <p><strong>📧 Besoin de nous joindre ?</strong></p>
                 <p>Répondez simplement à cet email ou contactez-nous :</p>
-                <p>🌐 <strong>Site web :</strong> construction-ste-marie.com</p>
+                <p>🌐 <strong>Site web :</strong> constructionstemarie.com</p>
                 <p style="margin-top: 20px; font-size: 12px;">
                   ✨ Merci de faire confiance à Construction Ste-Marie Inc. pour votre projet !
                 </p>

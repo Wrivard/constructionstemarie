@@ -39,7 +39,7 @@ Allow: /images/*.svg
 Allow: /images/*.webp
 
 # Sitemap locations
-Sitemap: https://construction-ste-marie.com/sitemap.xml
+Sitemap: https://constructionstemarie.com/sitemap.xml
 
 # Crawl delay for better server performance
 Crawl-delay: 1
