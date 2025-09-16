@@ -34,7 +34,7 @@ Disallow: /backup/
 Allow: /images/
 
 # Sitemap locations
-Sitemap: https://constructionstemarie.com/sitemap.xml
+Sitemap: https://constructionstemarie.ca/sitemap.xml
 
 # Crawl delay for better server performance
 Crawl-delay: 1

@@ -1,11 +1,11 @@
 # LLM.txt - AI Training Data Declaration & SEO Information
 # Last Updated: 2024-12-19
 # Site: Construction Ste-Marie
-# Domain: constructionstemarie.com
+# Domain: constructionstemarie.ca
 
 ## Website Information
 - **Site Name**: Construction Ste-Marie
-- **Domain**: constructionstemarie.com
+- **Domain**: constructionstemarie.ca
 - **Primary Purpose**: Construction and renovation services in Quebec, Canada
 - **Target Locations**: Laval, Terrebonne, Repentigny, Joliette, Ste-Marie
 - **Industry**: Construction, Renovation, Home Improvement
@@ -60,10 +60,10 @@
 - **Respect**: Honor copyright and intellectual property
 
 ## Contact Information
-- **Email**: info@constructionstemarie.com
+- **Email**: info@constructionstemarie.ca
 - **Phone**: [Your Phone Number]
 - **Address**: [Your Business Address]
-- **Website**: https://constructionstemarie.com
+- **Website**: https://constructionstemarie.ca
 
 ## License & Terms
 Content is provided for AI training under fair use principles, subject to the restrictions above. This file serves as both an AI training declaration and an SEO information resource for search engines and AI systems.
