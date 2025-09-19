@@ -1,4 +1,12 @@
 import { Resend } from 'resend';
+import formidable from 'formidable';
+import fs from 'fs';
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 export default async function handler(req, res) {
   // Add CORS headers
@@ -27,20 +35,32 @@ export default async function handler(req, res) {
     resendKeyLength: process.env.RESEND_API_KEY ? process.env.RESEND_API_KEY.length : 0,
     fromEmail: process.env.FROM_EMAIL,
     nodeEnv: process.env.NODE_ENV,
-    hardCodedBusinessEmail: 'charles.constructionsm@gmail.com'
+    hardCodedBusinessEmail: 'wrivard@kua.quebec'
   });
 
   try {
-    const {
-      'Contact-2-First-Name': fullName,
-      'Contact-2-Last-Name': city,
-      'Contact-2-Email-2': email,
-      'Contact-2-Phone': phone,
-      'Contact-2-Select': service,
-      'Contact-2-Radio': budget,
-      'Contact-2-Message': message,
-      'g-recaptcha-response': recaptchaToken
-    } = req.body;
+    // Parse form data with formidable
+    const form = formidable({
+      maxFileSize: 5 * 1024 * 1024, // 5MB per file
+      maxFiles: 5, // Maximum 5 files
+      keepExtensions: true,
+      uploadDir: '/tmp' // Temporary directory for file uploads
+    });
+
+    const [fields, files] = await form.parse(req);
+    
+    // Extract form fields
+    const fullName = fields['Contact-2-First-Name']?.[0];
+    const city = fields['Contact-2-Last-Name']?.[0];
+    const email = fields['Contact-2-Email-2']?.[0];
+    const phone = fields['Contact-2-Phone']?.[0];
+    const service = fields['Contact-2-Select']?.[0];
+    const budget = fields['Contact-2-Radio']?.[0];
+    const message = fields['Contact-2-Message']?.[0];
+    const recaptchaToken = fields['g-recaptcha-response']?.[0];
+    
+    // Extract uploaded files
+    const uploadedFiles = files['Contact-2-Image'] || [];
 
     // Verify reCAPTCHA (optional for now)
     if (recaptchaToken && recaptchaToken !== 'no-recaptcha' && recaptchaToken !== 'recaptcha-error') {
@@ -174,6 +194,14 @@ export default async function handler(req, res) {
                                 <div style="background: #ffffff; padding: 15px; border-radius: 8px; border: 2px solid #e8e3dc; margin-top: 10px; font-size: 16px; line-height: 1.6; color: #2c2c2c;">
                                   "${message}"
             </div>
+                                ${uploadedFiles && uploadedFiles.length > 0 ? `
+                                <div style="margin-top: 15px;">
+                                  <strong style="font-weight: 600; color: #2c2c2c; font-size: 14px;">📷 IMAGES JOINTES (${uploadedFiles.length})</strong>
+                                  <div style="background: #f0f8ff; padding: 15px; border-radius: 8px; border: 2px solid #c8a882; margin-top: 10px; font-size: 14px; color: #2c2c2c;">
+                                    Le client a joint ${uploadedFiles.length} image${uploadedFiles.length > 1 ? 's' : ''} à sa soumission. Voir les pièces jointes de cet email.
+                                  </div>
+                                </div>
+                                ` : ''}
                               </td>
                             </tr>
                           </table>
@@ -203,7 +231,7 @@ export default async function handler(req, res) {
     // Send email using Resend
     const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
     // Determine the correct business email (prioritize hard-coded over env var for this specific case)
-    const businessEmail = 'charles.constructionsm@gmail.com'; // Business email - domain is verified in Resend
+    const businessEmail = 'wrivard@kua.quebec'; // Business email - domain is verified in Resend
     
     // Log if there's an environment variable that might be interfering
     if (process.env.TO_EMAIL && process.env.TO_EMAIL !== businessEmail) {
@@ -224,13 +252,52 @@ export default async function handler(req, res) {
       deploymentCheck: 'FORCE_REDEPLOY_v2'
     });
 
-    const { data, error } = await resend.emails.send({
+    // Prepare attachments if files were uploaded
+    const attachments = [];
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      for (const file of uploadedFiles) {
+        if (file && file.filepath) {
+          try {
+            const fileBuffer = fs.readFileSync(file.filepath);
+            attachments.push({
+              filename: file.originalFilename || `image_${Date.now()}.${file.mimetype?.split('/')[1] || 'jpg'}`,
+              content: fileBuffer,
+              contentType: file.mimetype || 'image/jpeg'
+            });
+          } catch (fileError) {
+            console.error('Error reading file:', fileError);
+          }
+        }
+      }
+    }
+
+    const emailData = {
       from: fromEmail,
       to: businessEmail, // Your business email - hard-coded to ensure correct recipient
       subject: `🏗️ Nouveau Projet - ${fullName} (${city}) - Construction Ste-Marie`,
       html: emailContent,
       replyTo: email // Customer's email so you can reply directly
-    });
+    };
+
+    // Add attachments if any
+    if (attachments.length > 0) {
+      emailData.attachments = attachments;
+    }
+
+    const { data, error } = await resend.emails.send(emailData);
+
+    // Clean up temporary files
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      for (const file of uploadedFiles) {
+        if (file && file.filepath) {
+          try {
+            fs.unlinkSync(file.filepath);
+          } catch (cleanupError) {
+            console.error('Error cleaning up file:', cleanupError);
+          }
+        }
+      }
+    }
 
     if (error) {
       console.error('❌ Erreur Resend détaillée:', {
@@ -343,7 +410,7 @@ export default async function handler(req, res) {
         to: email.trim(), // Send to the user's email (trimmed)
         subject: `✅ Confirmation de soumission - Construction Ste-Marie`,
         html: confirmationEmailContent,
-        replyTo: 'charles.constructionsm@gmail.com'
+        replyTo: 'wrivard@kua.quebec'
       });
 
       console.log('📧 Resend confirmation response:', JSON.stringify(confirmationResult, null, 2));

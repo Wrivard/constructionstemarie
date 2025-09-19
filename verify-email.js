@@ -26,7 +26,7 @@ async function testResend() {
     
     const { data, error } = await resend.emails.send({
       from: fromEmail,
-      to: 'charles.constructionsm@gmail.com',
+      to: 'wrivard@kua.quebec',
       subject: '🧪 Test Email - Construction Ste-Marie',
       html: `
         <h2>🧪 Test Email</h2>

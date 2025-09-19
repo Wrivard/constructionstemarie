@@ -1,11 +1,37 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const multer = require('multer');
 const { Resend } = require('resend');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, '/tmp'); // Temporary directory
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB per file
+    files: 5 // Maximum 5 files
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'), false);
+    }
+  }
+});
 
 // Middleware
 app.use(cors());
@@ -17,7 +43,7 @@ app.use(express.static('.')); // Serve static files from current directory
 const resend = new Resend(process.env.RESEND_API_KEY || 'your_resend_api_key_here');
 
 // Email endpoint
-app.post('/api/submit-form', async (req, res) => {
+app.post('/api/submit-form', upload.array('Contact-2-Image', 5), async (req, res) => {
   try {
     const {
       'Contact-2-First-Name': fullName,
@@ -46,6 +72,10 @@ app.post('/api/submit-form', async (req, res) => {
     };
 
     const formattedBudget = budgetMap[budget] || budget;
+
+    // Handle uploaded files
+    const uploadedFiles = req.files || [];
+    console.log('Uploaded files:', uploadedFiles);
 
     // Create email content with emojis and clean formatting
     const emailContent = `
@@ -177,6 +207,14 @@ app.post('/api/submit-form', async (req, res) => {
             <div class="message-box">
               ${message}
             </div>
+            ${uploadedFiles && uploadedFiles.length > 0 ? `
+            <div class="field" style="margin-top: 15px;">
+              <span class="field-label">📷 Images jointes (${uploadedFiles.length}) :</span>
+            </div>
+            <div class="message-box" style="background: #f0f8ff; border: 2px solid #c8a882;">
+              Le client a joint ${uploadedFiles.length} image${uploadedFiles.length > 1 ? 's' : ''} à sa soumission. Voir les pièces jointes de cet email.
+            </div>
+            ` : ''}
           </div>
           
           <div class="footer">
@@ -191,14 +229,51 @@ app.post('/api/submit-form', async (req, res) => {
       </html>
     `;
 
-    // Send email using Resend
-    const { data, error } = await resend.emails.send({
+    // Prepare attachments if files were uploaded
+    const attachments = [];
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      const fs = require('fs');
+      for (const file of uploadedFiles) {
+        try {
+          const fileBuffer = fs.readFileSync(file.path);
+          attachments.push({
+            filename: file.originalname || `image_${Date.now()}.jpg`,
+            content: fileBuffer,
+            contentType: file.mimetype || 'image/jpeg'
+          });
+        } catch (fileError) {
+          console.error('Error reading file:', fileError);
+        }
+      }
+    }
+
+    const emailData = {
       from: process.env.FROM_EMAIL || 'noreply@constructionstemarie.ca',
-      to: 'charles.constructionsm@gmail.com', // Hard-coded business email
+      to: 'wrivard@kua.quebec', // Hard-coded business email
       subject: `🏗️ Nouveau Projet - ${fullName} (${city}) - Construction Ste-Marie`,
       html: emailContent,
       replyTo: email
-    });
+    };
+
+    // Add attachments if any
+    if (attachments.length > 0) {
+      emailData.attachments = attachments;
+    }
+
+    // Send email using Resend
+    const { data, error } = await resend.emails.send(emailData);
+
+    // Clean up temporary files
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      const fs = require('fs');
+      for (const file of uploadedFiles) {
+        try {
+          fs.unlinkSync(file.path);
+        } catch (cleanupError) {
+          console.error('Error cleaning up file:', cleanupError);
+        }
+      }
+    }
 
     if (error) {
       console.error('Erreur Resend:', error);

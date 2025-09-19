@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
     const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
-    const hardCodedEmail = 'charles.constructionsm@gmail.com';
+    const hardCodedEmail = 'wrivard@kua.quebec';
 
     console.log('🧪 DEBUG EMAIL TEST');
     console.log('📧 From:', fromEmail);
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         <p><strong>Timestamp:</strong> ${new Date().toISOString()}</p>
         <p><strong>From:</strong> ${fromEmail}</p>
         <p><strong>To (hard-coded):</strong> ${hardCodedEmail}</p>
-        <p><strong>Expected recipient:</strong> charles.constructionsm@gmail.com</p>
+        <p><strong>Expected recipient:</strong> wrivard@kua.quebec</p>
         <p>If you receive this email at the wrong address, there's a routing issue somewhere!</p>
       `
     });

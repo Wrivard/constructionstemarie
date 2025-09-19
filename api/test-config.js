@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   const config = {
     timestamp: new Date().toISOString(),
-    hardCodedBusinessEmail: 'charles.constructionsm@gmail.com',
+    hardCodedBusinessEmail: 'wrivard@kua.quebec',
     environmentVars: {
       hasResendKey: !!process.env.RESEND_API_KEY,
       fromEmail: process.env.FROM_EMAIL,
