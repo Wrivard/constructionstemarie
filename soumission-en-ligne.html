@@ -473,11 +473,19 @@ margin: 0rem !important;
                         </div>
                       </div>
                       <div class="form_field-wrapper is-alternate"><label for="Contact-2-Message" class="form_field-label is-alternate">Message</label><textarea id="Contact-2-Message" name="Contact-2-Message" maxlength="5000" data-name="Contact 2 Message" placeholder="Écrivez votre message..." required="" class="form_input is-text-area is-alternate w-input"></textarea></div>
-                      <div class="form_field-wrapper is-alternate">
-                        <label for="Contact-2-Image" class="form_field-label is-alternate">Photos du projet (optionnel)</label>
-                        <input type="file" id="Contact-2-Image" name="Contact-2-Image[]" data-name="Contact 2 Image" accept="image/*" multiple class="form_input is-alternate w-input" style="padding: 8px 12px;">
-                        <div class="text-size-small" style="margin-top: 4px; color: #666;">Vous pouvez sélectionner plusieurs images (JPG, PNG, GIF - max 5MB chacune)</div>
-                      </div>
+            <div class="form_field-wrapper is-alternate">
+              <label class="form_field-label is-alternate">Photos du projet (optionnel)</label>
+              <div id="image-upload-container" style="border: 2px dashed #ccc; padding: 20px; border-radius: 8px; background: #f9f9f9;">
+                <div id="add-image-buttons" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                  <button type="button" class="add-image-btn" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">+ Ajouter une image</button>
+                </div>
+                <div id="selected-images" style="display: none;">
+                  <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #333;">Images sélectionnées:</h4>
+                  <div id="image-list"></div>
+                </div>
+                <div class="text-size-small" style="margin-top: 10px; color: #666;">Format accepté: JPG, PNG, GIF - Max 5MB par image - Maximum 5 images</div>
+              </div>
+            </div>
                       <div class="margin-bottom margin-xsmall"><label id="Contact-2-Checkbox" class="w-checkbox form_checkbox is-alternate">
                           <div class="w-checkbox-input w-checkbox-input--inputType-custom form_checkbox-icon is-alternate"></div><input type="checkbox" name="Contact-2-Checkbox" id="Contact 2 Checkbox" data-name="Contact 2 Checkbox" required="" style="opacity:0;position:absolute;z-index:-1"><span for="Contact-2-Checkbox" class="form_checkbox-label w-form-label">J&#x27;accepte les Conditions</span>
                         </label></div>
@@ -1406,91 +1414,113 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   </script>
 
-  <!-- Multiple File Selection Handler -->
+  <!-- Multiple Image Upload Handler -->
   <script>
-    // Handle multiple file selection
     document.addEventListener('DOMContentLoaded', function() {
-      const fileInput = document.getElementById('Contact-2-Image');
+      const container = document.getElementById('image-upload-container');
+      const addButtonsContainer = document.getElementById('add-image-buttons');
+      const selectedImagesDiv = document.getElementById('selected-images');
+      const imageList = document.getElementById('image-list');
+      const selectedFiles = [];
+      const maxImages = 5;
       
-      if (fileInput) {
-        // Create a display area for selected files
-        const fileDisplay = document.createElement('div');
-        fileDisplay.id = 'file-display';
-        fileDisplay.style.cssText = 'margin-top: 8px; font-size: 12px; color: #666;';
-        fileInput.parentNode.insertBefore(fileDisplay, fileInput.nextSibling);
-        
-        // Update display based on current files in input
-        function updateFileDisplay() {
-          const files = Array.from(fileInput.files);
-          console.log('🔍 updateFileDisplay called, files:', files.length, files);
-          
-          if (files.length === 0) {
-            fileDisplay.innerHTML = 'Aucun fichier sélectionné';
-          } else {
-            fileDisplay.innerHTML = `Fichiers sélectionnés (${files.length}):<br>` + 
-              files.map((file, index) => 
-                `${index + 1}. ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB) <button type="button" class="remove-file" data-index="${index}" style="margin-left: 8px; background: #ff4444; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;">×</button>`
-              ).join('<br>');
+      // Store selected files globally for form submission
+      window.selectedFiles = selectedFiles;
+      
+      // Create hidden file inputs for each image
+      function createFileInput() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.style.display = 'none';
+        input.addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            // Check file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+              alert('Le fichier est trop volumineux. Maximum 5MB par image.');
+              return;
+            }
             
-            // Add event listeners to remove buttons
-            fileDisplay.querySelectorAll('.remove-file').forEach(btn => {
-              btn.addEventListener('click', function() {
-                const index = parseInt(this.dataset.index);
-                const files = Array.from(fileInput.files);
-                files.splice(index, 1);
-                
-                // Update file input
-                const dataTransfer = new DataTransfer();
-                files.forEach(f => dataTransfer.items.add(f));
-                fileInput.files = dataTransfer.files;
-                
-                updateFileDisplay();
-              });
-            });
+            // Check if we already have max images
+            if (selectedFiles.length >= maxImages) {
+              alert(`Maximum ${maxImages} images autorisées.`);
+              return;
+            }
+            
+            // Add file to our list
+            selectedFiles.push(file);
+            updateDisplay();
+            updateButtons();
           }
-        }
-        
-        // Handle file selection - add to existing files
-        fileInput.addEventListener('change', function(e) {
-          const currentFiles = Array.from(fileInput.files);
-          const newFiles = Array.from(e.target.files);
-          
-          // If this is a new selection (not from our remove button), add to existing
-          if (newFiles.length > 0 && newFiles.length !== currentFiles.length) {
-            // Get previously selected files from data attribute
-            const previousFiles = JSON.parse(fileInput.dataset.previousFiles || '[]');
-            const allFiles = [...previousFiles, ...newFiles];
-            
-            // Remove duplicates
-            const uniqueFiles = allFiles.filter((file, index, self) => 
-              index === self.findIndex(f => f.name === file.name && f.size === file.size)
-            );
-            
-            // Update file input
-            const dataTransfer = new DataTransfer();
-            uniqueFiles.forEach(file => dataTransfer.items.add(file));
-            fileInput.files = dataTransfer.files;
-            
-            // Store for next selection
-            fileInput.dataset.previousFiles = JSON.stringify(uniqueFiles);
-          }
-          
-          updateFileDisplay();
         });
         
-        // Initial display - check for files immediately and after a short delay
-        updateFileDisplay();
-        
-        // Also check after a short delay in case files are loaded asynchronously
-        setTimeout(() => {
-          console.log('🔍 Delayed check - files:', fileInput.files.length, Array.from(fileInput.files));
-          updateFileDisplay();
-        }, 100);
-        
-        // Also check when the input gets focus (user interaction)
-        fileInput.addEventListener('focus', function() {
-          console.log('🔍 Focus event - files:', fileInput.files.length, Array.from(fileInput.files));
-          updateFileDisplay();
+        return input;
+      }
+      
+      // Update the display of selected images
+      function updateDisplay() {
+        if (selectedFiles.length === 0) {
+          selectedImagesDiv.style.display = 'none';
+        } else {
+          selectedImagesDiv.style.display = 'block';
+          imageList.innerHTML = selectedFiles.map((file, index) => `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px; background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 5px;">
+              <span style="flex: 1;">${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+              <button type="button" class="remove-image" data-index="${index}" style="background: #ff4444; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 14px;">×</button>
+            </div>
+          `).join('');
+          
+          // Add event listeners to remove buttons
+          imageList.querySelectorAll('.remove-image').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const index = parseInt(this.dataset.index);
+              selectedFiles.splice(index, 1);
+              updateDisplay();
+              updateButtons();
+            });
+          });
+        }
+      }
+      
+      // Update the add buttons
+      function updateButtons() {
+        const remaining = maxImages - selectedFiles.length;
+        if (remaining > 0) {
+          addButtonsContainer.innerHTML = `
+            <button type="button" class="add-image-btn" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">+ Ajouter une image</button>
+          `;
+          
+          // Add click handler to the button
+          const addBtn = addButtonsContainer.querySelector('.add-image-btn');
+          addBtn.addEventListener('click', function() {
+            const input = createFileInput();
+            document.body.appendChild(input);
+            input.click();
+            document.body.removeChild(input);
+          });
+        } else {
+          addButtonsContainer.innerHTML = '<span style="color: #666; font-style: italic;">Maximum de 5 images atteint</span>';
+        }
+      }
+      
+      // Initialize
+      updateButtons();
+      
+      // Store files in a hidden input for form submission
+      const form = document.getElementById('wf-form-Contact-2-Form');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          // Create a hidden input with all selected files
+          const hiddenInput = document.createElement('input');
+          hiddenInput.type = 'hidden';
+          hiddenInput.name = 'selected-files';
+          hiddenInput.value = JSON.stringify(selectedFiles.map(f => ({
+            name: f.name,
+            size: f.size,
+            type: f.type
+          })));
+          form.appendChild(hiddenInput);
         });
       }
     });
@@ -1593,6 +1623,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get form data
         const formData = new FormData(form);
         
+        // Add selected files to form data
+        const selectedFiles = window.selectedFiles || [];
+        selectedFiles.forEach((file, index) => {
+          formData.append('Contact-2-Image[]', file);
+        });
+        
         // Add reCAPTCHA response
         formData.append('g-recaptcha-response', recaptchaResponse);
         
@@ -1692,6 +1728,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Get form data
         const formData = new FormData(newForm);
+        
+        // Add selected files to form data
+        const selectedFiles = window.selectedFiles || [];
+        selectedFiles.forEach((file, index) => {
+          formData.append('Contact-2-Image[]', file);
+        });
         
         // Add reCAPTCHA if available
         if (window.grecaptcha && window.grecaptcha.execute) {
