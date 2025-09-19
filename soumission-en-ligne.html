@@ -1389,6 +1389,20 @@ document.addEventListener('DOMContentLoaded', function() {
         if (grecaptcha.execute) {
           console.log('✅ reCAPTCHA execute function available');
         }
+        
+        // Test a simple reCAPTCHA call
+        setTimeout(() => {
+          console.log('🧪 Testing reCAPTCHA execute...');
+          grecaptcha.ready(() => {
+            grecaptcha.execute('6Lf8-84rAAAAADnuAy_xIPIcJzKZKoazMADJyzmg', {action: 'test'})
+              .then(token => {
+                console.log('✅ reCAPTCHA test successful! Token:', token.substring(0, 20) + '...');
+              })
+              .catch(error => {
+                console.error('❌ reCAPTCHA test failed:', error);
+              });
+          });
+        }, 2000);
       } else {
         console.error('❌ reCAPTCHA script not loaded');
       }
