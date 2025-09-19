@@ -480,7 +480,7 @@ margin: 0rem !important;
                   <button type="button" onclick="addImage()" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">+ Ajouter une image</button>
                 </div>
                 <div id="selected-images" style="display: none;">
-                  <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #333;">Images sélectionnées:</h4>
+                  <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #333; font-weight: bold;">Images sélectionnées:</h4>
                   <div id="image-list"></div>
                 </div>
                 <div class="text-size-small" style="margin-top: 10px; color: #666;">Format accepté: JPG, PNG, GIF - Max 5MB par image - Maximum 5 images</div>
@@ -1472,7 +1472,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedImagesDiv.style.display = 'block';
         imageList.innerHTML = window.selectedFiles.map((file, index) => `
           <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px; background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 5px;">
-            <span style="flex: 1;">${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+            <span style="flex: 1; color: #333; font-size: 14px;">${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
             <button type="button" onclick="removeImage(${index})" style="background: #ff4444; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 14px;">×</button>
           </div>
         `).join('');
