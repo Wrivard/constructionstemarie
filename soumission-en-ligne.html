@@ -1411,7 +1411,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle multiple file selection
     document.addEventListener('DOMContentLoaded', function() {
       const fileInput = document.getElementById('Contact-2-Image');
-      const selectedFiles = [];
       
       if (fileInput) {
         // Create a display area for selected files
@@ -1420,66 +1419,62 @@ document.addEventListener('DOMContentLoaded', function() {
         fileDisplay.style.cssText = 'margin-top: 8px; font-size: 12px; color: #666;';
         fileInput.parentNode.insertBefore(fileDisplay, fileInput.nextSibling);
         
-        // Update display when files are selected
+        // Update display based on current files in input
         function updateFileDisplay() {
-          if (selectedFiles.length === 0) {
+          const files = Array.from(fileInput.files);
+          if (files.length === 0) {
             fileDisplay.innerHTML = 'Aucun fichier sélectionné';
           } else {
-            fileDisplay.innerHTML = `Fichiers sélectionnés (${selectedFiles.length}):<br>` + 
-              selectedFiles.map((file, index) => 
-                `${index + 1}. ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`
+            fileDisplay.innerHTML = `Fichiers sélectionnés (${files.length}):<br>` + 
+              files.map((file, index) => 
+                `${index + 1}. ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB) <button type="button" class="remove-file" data-index="${index}" style="margin-left: 8px; background: #ff4444; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;">×</button>`
               ).join('<br>');
+            
+            // Add event listeners to remove buttons
+            fileDisplay.querySelectorAll('.remove-file').forEach(btn => {
+              btn.addEventListener('click', function() {
+                const index = parseInt(this.dataset.index);
+                const files = Array.from(fileInput.files);
+                files.splice(index, 1);
+                
+                // Update file input
+                const dataTransfer = new DataTransfer();
+                files.forEach(f => dataTransfer.items.add(f));
+                fileInput.files = dataTransfer.files;
+                
+                updateFileDisplay();
+              });
+            });
           }
         }
         
-        // Handle file selection
+        // Handle file selection - add to existing files
         fileInput.addEventListener('change', function(e) {
+          const currentFiles = Array.from(fileInput.files);
           const newFiles = Array.from(e.target.files);
           
-          // Add new files to our list (avoid duplicates)
-          newFiles.forEach(file => {
-            if (!selectedFiles.some(existingFile => 
-              existingFile.name === file.name && existingFile.size === file.size
-            )) {
-              selectedFiles.push(file);
-            }
-          });
-          
-          // Update the file input to include all selected files
-          const dataTransfer = new DataTransfer();
-          selectedFiles.forEach(file => dataTransfer.items.add(file));
-          fileInput.files = dataTransfer.files;
+          // If this is a new selection (not from our remove button), add to existing
+          if (newFiles.length > 0 && newFiles.length !== currentFiles.length) {
+            // Get previously selected files from data attribute
+            const previousFiles = JSON.parse(fileInput.dataset.previousFiles || '[]');
+            const allFiles = [...previousFiles, ...newFiles];
+            
+            // Remove duplicates
+            const uniqueFiles = allFiles.filter((file, index, self) => 
+              index === self.findIndex(f => f.name === file.name && f.size === file.size)
+            );
+            
+            // Update file input
+            const dataTransfer = new DataTransfer();
+            uniqueFiles.forEach(file => dataTransfer.items.add(file));
+            fileInput.files = dataTransfer.files;
+            
+            // Store for next selection
+            fileInput.dataset.previousFiles = JSON.stringify(uniqueFiles);
+          }
           
           updateFileDisplay();
         });
-        
-        // Add remove button for each file
-        function addRemoveButtons() {
-          const removeButtons = fileDisplay.querySelectorAll('.remove-file');
-          removeButtons.forEach(btn => btn.remove());
-          
-          selectedFiles.forEach((file, index) => {
-            const removeBtn = document.createElement('button');
-            removeBtn.type = 'button';
-            removeBtn.className = 'remove-file';
-            removeBtn.innerHTML = '×';
-            removeBtn.style.cssText = 'margin-left: 8px; background: #ff4444; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;';
-            
-            removeBtn.addEventListener('click', function() {
-              selectedFiles.splice(index, 1);
-              const dataTransfer = new DataTransfer();
-              selectedFiles.forEach(f => dataTransfer.items.add(f));
-              fileInput.files = dataTransfer.files;
-              updateFileDisplay();
-              addRemoveButtons();
-            });
-            
-            const fileLine = fileDisplay.children[index];
-            if (fileLine) {
-              fileLine.appendChild(removeBtn);
-            }
-          });
-        }
         
         // Initial display
         updateFileDisplay();
