@@ -1422,6 +1422,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update display based on current files in input
         function updateFileDisplay() {
           const files = Array.from(fileInput.files);
+          console.log('🔍 updateFileDisplay called, files:', files.length, files);
+          
           if (files.length === 0) {
             fileDisplay.innerHTML = 'Aucun fichier sélectionné';
           } else {
@@ -1476,8 +1478,20 @@ document.addEventListener('DOMContentLoaded', function() {
           updateFileDisplay();
         });
         
-        // Initial display
+        // Initial display - check for files immediately and after a short delay
         updateFileDisplay();
+        
+        // Also check after a short delay in case files are loaded asynchronously
+        setTimeout(() => {
+          console.log('🔍 Delayed check - files:', fileInput.files.length, Array.from(fileInput.files));
+          updateFileDisplay();
+        }, 100);
+        
+        // Also check when the input gets focus (user interaction)
+        fileInput.addEventListener('focus', function() {
+          console.log('🔍 Focus event - files:', fileInput.files.length, Array.from(fileInput.files));
+          updateFileDisplay();
+        });
       }
     });
   </script>
