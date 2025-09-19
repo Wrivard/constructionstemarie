@@ -276,7 +276,7 @@ app.post('/api/submit-form', async (req, res) => {
               
               <p><strong>⏰ Prochaines étapes :</strong></p>
               <ul>
-                <li>📞 Nous vous contacterons dans les <strong>24-48 heures</strong></li>
+                <li>📞 Nous vous contacterons dans les <strong>48-72 heures</strong></li>
                 <li>📋 Nous discuterons de vos besoins en détail</li>
                 <li>📄 Nous vous fournirons une soumission détaillée</li>
               </ul>
@@ -291,7 +291,7 @@ app.post('/api/submit-form', async (req, res) => {
               <div class="footer">
                 <p><strong>📧 Besoin de nous joindre ?</strong></p>
                 <p>Répondez simplement à cet email ou contactez-nous :</p>
-                <p>🌐 <strong>Site web :</strong> constructionstemarie.com</p>
+                <p>🌐 <strong>Site web :</strong> constructionstemarie.ca</p>
                 <p style="margin-top: 20px; font-size: 12px;">
                   ✨ Merci de faire confiance à Construction Ste-Marie Inc. pour votre projet !
                 </p>

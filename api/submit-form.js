@@ -293,7 +293,7 @@ export default async function handler(req, res) {
                     
                     <p style="margin: 20px 0 10px 0; font-size: 16px; font-weight: 600;">⏰ Prochaines étapes :</p>
                     <table width="100%" cellpadding="5" cellspacing="0">
-                      <tr><td style="font-size: 16px;">📞 Nous vous contacterons dans les <strong>24-48 heures</strong></td></tr>
+                      <tr><td style="font-size: 16px;">📞 Nous vous contacterons dans les <strong>48-72 heures</strong></td></tr>
                       <tr><td style="font-size: 16px;">📋 Nous discuterons de vos besoins en détail</td></tr>
                       <tr><td style="font-size: 16px;">📄 Nous vous fournirons une soumission détaillée</td></tr>
                     </table>
@@ -312,7 +312,7 @@ export default async function handler(req, res) {
                   <td style="text-align: center; padding: 30px; background: #2c2c2c; color: #ffffff;">
                     <p style="margin: 0 0 10px 0; font-size: 16px; font-weight: 600; color: #c8a882;">📧 Besoin de nous joindre ?</p>
                     <p style="margin: 0 0 10px 0; font-size: 14px;">Répondez simplement à cet email ou contactez-nous</p>
-                    <p style="margin: 0 0 20px 0; font-size: 14px;">🌐 <strong>Site web :</strong> constructionstemarie.com</p>
+                    <p style="margin: 0 0 20px 0; font-size: 14px;">🌐 <strong>Site web :</strong> constructionstemarie.ca</p>
                     <p style="margin: 0; font-size: 12px; color: #c8a882;">
                 ✨ Merci de faire confiance à Construction Ste-Marie Inc. pour votre projet !
               </p>
