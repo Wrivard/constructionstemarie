@@ -1406,6 +1406,87 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   </script>
 
+  <!-- Multiple File Selection Handler -->
+  <script>
+    // Handle multiple file selection
+    document.addEventListener('DOMContentLoaded', function() {
+      const fileInput = document.getElementById('Contact-2-Image');
+      const selectedFiles = [];
+      
+      if (fileInput) {
+        // Create a display area for selected files
+        const fileDisplay = document.createElement('div');
+        fileDisplay.id = 'file-display';
+        fileDisplay.style.cssText = 'margin-top: 8px; font-size: 12px; color: #666;';
+        fileInput.parentNode.insertBefore(fileDisplay, fileInput.nextSibling);
+        
+        // Update display when files are selected
+        function updateFileDisplay() {
+          if (selectedFiles.length === 0) {
+            fileDisplay.innerHTML = 'Aucun fichier sélectionné';
+          } else {
+            fileDisplay.innerHTML = `Fichiers sélectionnés (${selectedFiles.length}):<br>` + 
+              selectedFiles.map((file, index) => 
+                `${index + 1}. ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`
+              ).join('<br>');
+          }
+        }
+        
+        // Handle file selection
+        fileInput.addEventListener('change', function(e) {
+          const newFiles = Array.from(e.target.files);
+          
+          // Add new files to our list (avoid duplicates)
+          newFiles.forEach(file => {
+            if (!selectedFiles.some(existingFile => 
+              existingFile.name === file.name && existingFile.size === file.size
+            )) {
+              selectedFiles.push(file);
+            }
+          });
+          
+          // Update the file input to include all selected files
+          const dataTransfer = new DataTransfer();
+          selectedFiles.forEach(file => dataTransfer.items.add(file));
+          fileInput.files = dataTransfer.files;
+          
+          updateFileDisplay();
+        });
+        
+        // Add remove button for each file
+        function addRemoveButtons() {
+          const removeButtons = fileDisplay.querySelectorAll('.remove-file');
+          removeButtons.forEach(btn => btn.remove());
+          
+          selectedFiles.forEach((file, index) => {
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-file';
+            removeBtn.innerHTML = '×';
+            removeBtn.style.cssText = 'margin-left: 8px; background: #ff4444; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 12px;';
+            
+            removeBtn.addEventListener('click', function() {
+              selectedFiles.splice(index, 1);
+              const dataTransfer = new DataTransfer();
+              selectedFiles.forEach(f => dataTransfer.items.add(f));
+              fileInput.files = dataTransfer.files;
+              updateFileDisplay();
+              addRemoveButtons();
+            });
+            
+            const fileLine = fileDisplay.children[index];
+            if (fileLine) {
+              fileLine.appendChild(removeBtn);
+            }
+          });
+        }
+        
+        // Initial display
+        updateFileDisplay();
+      }
+    });
+  </script>
+
   <!-- Form Submission Script -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
