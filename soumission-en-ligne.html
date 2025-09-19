@@ -477,7 +477,7 @@ margin: 0rem !important;
               <label class="form_field-label is-alternate">Photos du projet (optionnel)</label>
               <div id="image-upload-container" style="border: 2px dashed #ccc; padding: 20px; border-radius: 8px; background: #f9f9f9;">
                 <div id="add-image-buttons" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
-                  <button type="button" class="add-image-btn" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">+ Ajouter une image</button>
+                  <button type="button" onclick="addImage()" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">+ Ajouter une image</button>
                 </div>
                 <div id="selected-images" style="display: none;">
                   <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #333;">Images sélectionnées:</h4>
@@ -1414,139 +1414,89 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   </script>
 
-  <!-- Multiple Image Upload Handler -->
+  <!-- Simple Image Upload Handler -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('🚀 Image upload script starting...');
-      const container = document.getElementById('image-upload-container');
-      const addButtonsContainer = document.getElementById('add-image-buttons');
+    // Global variables
+    window.selectedFiles = [];
+    const maxImages = 5;
+    
+    // Simple function to add image
+    function addImage() {
+      console.log('🖱️ Add image button clicked!');
+      
+      // Check if we already have max images
+      if (window.selectedFiles.length >= maxImages) {
+        alert(`Maximum ${maxImages} images autorisées.`);
+        return;
+      }
+      
+      // Create file input
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.style.display = 'none';
+      
+      input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          console.log('📄 File selected:', file.name, file.size);
+          
+          // Check file size (5MB max)
+          if (file.size > 5 * 1024 * 1024) {
+            alert('Le fichier est trop volumineux. Maximum 5MB par image.');
+            return;
+          }
+          
+          // Add file to our list
+          window.selectedFiles.push(file);
+          console.log('✅ File added. Total files:', window.selectedFiles.length);
+          updateDisplay();
+        }
+      };
+      
+      // Trigger file selection
+      document.body.appendChild(input);
+      input.click();
+      document.body.removeChild(input);
+    }
+    
+    // Update display
+    function updateDisplay() {
       const selectedImagesDiv = document.getElementById('selected-images');
       const imageList = document.getElementById('image-list');
-      const selectedFiles = [];
-      const maxImages = 5;
+      const addButtonsContainer = document.getElementById('add-image-buttons');
       
-      console.log('🔍 Elements found:', {
-        container: !!container,
-        addButtonsContainer: !!addButtonsContainer,
-        selectedImagesDiv: !!selectedImagesDiv,
-        imageList: !!imageList
-      });
-      
-      // Store selected files globally for form submission
-      window.selectedFiles = selectedFiles;
-      
-      // Create hidden file inputs for each image
-      function createFileInput() {
-        console.log('🔧 Creating file input...');
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.style.display = 'none';
-        input.addEventListener('change', function(e) {
-          console.log('📁 File input changed:', e.target.files);
-          const file = e.target.files[0];
-          if (file) {
-            console.log('📄 File selected:', file.name, file.size);
-            // Check file size (5MB max)
-            if (file.size > 5 * 1024 * 1024) {
-              alert('Le fichier est trop volumineux. Maximum 5MB par image.');
-              return;
-            }
-            
-            // Check if we already have max images
-            if (selectedFiles.length >= maxImages) {
-              alert(`Maximum ${maxImages} images autorisées.`);
-              return;
-            }
-            
-            // Add file to our list
-            selectedFiles.push(file);
-            console.log('✅ File added to list. Total files:', selectedFiles.length);
-            updateDisplay();
-            updateButtons();
-          }
-        });
-        
-        return input;
+      if (window.selectedFiles.length === 0) {
+        selectedImagesDiv.style.display = 'none';
+      } else {
+        selectedImagesDiv.style.display = 'block';
+        imageList.innerHTML = window.selectedFiles.map((file, index) => `
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px; background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 5px;">
+            <span style="flex: 1;">${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+            <button type="button" onclick="removeImage(${index})" style="background: #ff4444; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 14px;">×</button>
+          </div>
+        `).join('');
       }
       
-      // Update the display of selected images
-      function updateDisplay() {
-        if (selectedFiles.length === 0) {
-          selectedImagesDiv.style.display = 'none';
-        } else {
-          selectedImagesDiv.style.display = 'block';
-          imageList.innerHTML = selectedFiles.map((file, index) => `
-            <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px; background: white; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 5px;">
-              <span style="flex: 1;">${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
-              <button type="button" class="remove-image" data-index="${index}" style="background: #ff4444; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 14px;">×</button>
-            </div>
-          `).join('');
-          
-          // Add event listeners to remove buttons
-          imageList.querySelectorAll('.remove-image').forEach(btn => {
-            btn.addEventListener('click', function() {
-              const index = parseInt(this.dataset.index);
-              selectedFiles.splice(index, 1);
-              updateDisplay();
-              updateButtons();
-            });
-          });
-        }
+      // Update button
+      const remaining = maxImages - window.selectedFiles.length;
+      if (remaining > 0) {
+        addButtonsContainer.innerHTML = `<button type="button" onclick="addImage()" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">+ Ajouter une image</button>`;
+      } else {
+        addButtonsContainer.innerHTML = '<span style="color: #666; font-style: italic;">Maximum de 5 images atteint</span>';
       }
-      
-      // Update the add buttons
-      function updateButtons() {
-        const remaining = maxImages - selectedFiles.length;
-        if (remaining > 0) {
-          addButtonsContainer.innerHTML = `
-            <button type="button" class="add-image-btn" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">+ Ajouter une image</button>
-          `;
-          
-          // Add click handler to the button
-          const addBtn = addButtonsContainer.querySelector('.add-image-btn');
-          if (addBtn) {
-            console.log('🔘 Adding click handler to button');
-            addBtn.addEventListener('click', function(e) {
-              e.preventDefault();
-              console.log('🖱️ Add button clicked!');
-              const input = createFileInput();
-              document.body.appendChild(input);
-              input.click();
-              // Don't remove immediately, let the change event fire first
-              setTimeout(() => {
-                if (document.body.contains(input)) {
-                  document.body.removeChild(input);
-                }
-              }, 100);
-            });
-          } else {
-            console.error('❌ Add button not found!');
-          }
-        } else {
-          addButtonsContainer.innerHTML = '<span style="color: #666; font-style: italic;">Maximum de 5 images atteint</span>';
-        }
-      }
-      
-      // Initialize
-      updateButtons();
-      
-      // Store files in a hidden input for form submission
-      const form = document.getElementById('wf-form-Contact-2-Form');
-      if (form) {
-        form.addEventListener('submit', function(e) {
-          // Create a hidden input with all selected files
-          const hiddenInput = document.createElement('input');
-          hiddenInput.type = 'hidden';
-          hiddenInput.name = 'selected-files';
-          hiddenInput.value = JSON.stringify(selectedFiles.map(f => ({
-            name: f.name,
-            size: f.size,
-            type: f.type
-          })));
-          form.appendChild(hiddenInput);
-        });
-      }
+    }
+    
+    // Remove image function
+    function removeImage(index) {
+      window.selectedFiles.splice(index, 1);
+      updateDisplay();
+    }
+    
+    // Initialize when page loads
+    window.addEventListener('load', function() {
+      console.log('🚀 Image upload script loaded');
+      updateDisplay();
     });
   </script>
 
