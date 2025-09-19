@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA Test</title>
+</head>
+<body>
+    <h1>reCAPTCHA Test</h1>
+    <button onclick="testRecaptcha()">Test reCAPTCHA</button>
+    <div id="result"></div>
+
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lf8-84rAAAAADnuAy_xIPIcJzKZKoazMADJyzmg"></script>
+    <script>
+        function testRecaptcha() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            if (typeof grecaptcha === 'undefined') {
+                resultDiv.innerHTML = '❌ reCAPTCHA script not loaded';
+                return;
+            }
+            
+            grecaptcha.ready(() => {
+                grecaptcha.execute('6Lf8-84rAAAAADnuAy_xIPIcJzKZKoazMADJyzmg', {action: 'test'})
+                    .then(token => {
+                        resultDiv.innerHTML = '✅ reCAPTCHA works! Token: ' + token.substring(0, 20) + '...';
+                    })
+                    .catch(error => {
+                        resultDiv.innerHTML = '❌ reCAPTCHA failed: ' + error.message;
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
