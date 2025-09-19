@@ -1667,18 +1667,28 @@ document.addEventListener('DOMContentLoaded', function() {
       const fileText = document.getElementById('file-text');
       
       if (fileInput && fileText) {
+        console.log('File input found:', fileInput);
+        console.log('File text element found:', fileText);
+        
         fileInput.addEventListener('change', function() {
           const files = this.files;
+          console.log('Files selected:', files.length, files);
+          
           if (files.length > 0) {
             if (files.length === 1) {
               fileText.textContent = `📷 1 fichier sélectionné`;
+              console.log('Updated to: 1 fichier sélectionné');
             } else {
               fileText.textContent = `📷 ${files.length} fichiers sélectionnés`;
+              console.log(`Updated to: ${files.length} fichiers sélectionnés`);
             }
           } else {
             fileText.textContent = '📷 Choisir des fichiers';
+            console.log('Updated to: Choisir des fichiers');
           }
         });
+      } else {
+        console.error('File input or text element not found:', { fileInput, fileText });
       }
     });
   </script>
