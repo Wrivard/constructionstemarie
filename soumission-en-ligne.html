@@ -1502,24 +1502,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Get form data
         const formData = new FormData(form);
-        const formObject = {};
-        
-        // Convert FormData to object
-        for (let [key, value] of formData.entries()) {
-          formObject[key] = value;
-        }
         
         // Add reCAPTCHA response
-        formObject['g-recaptcha-response'] = recaptchaResponse;
+        formData.append('g-recaptcha-response', recaptchaResponse);
         
         try {
-          // Send form data to our API
+          // Send form data to our API (don't set Content-Type header, let browser set it with boundary)
           const response = await fetch('/api/submit-form', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formObject)
+            body: formData
           });
           
           const result = await response.json();
@@ -1611,31 +1602,27 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Get form data
         const formData = new FormData(newForm);
-        const data = {};
-        formData.forEach((value, key) => {
-          data[key] = value;
-        });
         
         // Add reCAPTCHA if available
         if (window.grecaptcha && window.grecaptcha.execute) {
           try {
-            data['g-recaptcha-response'] = await window.grecaptcha.execute('6Len-rQrAAAAAK6drmKppj8fJODYgnoBIB57xfdu', {action: 'submit'});
+            const recaptchaToken = await window.grecaptcha.execute('6Len-rQrAAAAAK6drmKppj8fJODYgnoBIB57xfdu', {action: 'submit'});
+            formData.append('g-recaptcha-response', recaptchaToken);
             console.log('✅ reCAPTCHA token added');
           } catch (e) {
             console.warn('⚠️ reCAPTCHA failed:', e);
-            data['g-recaptcha-response'] = 'no-recaptcha';
+            formData.append('g-recaptcha-response', 'no-recaptcha');
           }
         } else {
-          data['g-recaptcha-response'] = null;
+          formData.append('g-recaptcha-response', 'no-recaptcha');
         }
         
-        console.log('📋 Sending:', data);
+        console.log('📋 Sending FormData with files');
         
         try {
           const response = await fetch('/api/submit-form', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: formData
           });
           
           const result = await response.json();
