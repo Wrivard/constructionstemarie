@@ -478,10 +478,10 @@ margin: 0rem !important;
                         <div style="position: relative; display: inline-block; width: 100%;">
                           <input type="file" id="Contact-2-Image" name="Contact-2-Image" data-name="Contact 2 Image" accept="image/*" multiple style="position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer;">
                           <div class="form_input is-alternate w-input" style="padding: 8px 12px; background: #f8f9fa; border: 2px dashed #c8a882; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; min-height: 48px;">
-                            <span id="file-text">📷 Choisir des fichiers</span>
+                            <span id="file-text">📷 Choose files</span>
                           </div>
                         </div>
-                        <div class="text-size-small" style="margin-top: 4px; color: #666;">Vous pouvez sélectionner plusieurs images (JPG, PNG, GIF - max 5MB chacune)</div>
+                        <div class="text-size-small" style="margin-top: 4px; color: #666;">You can select multiple images (JPG, PNG, GIF - max 5MB each)</div>
                       </div>
                       <div class="margin-bottom margin-xsmall"><label id="Contact-2-Checkbox" class="w-checkbox form_checkbox is-alternate">
                           <div class="w-checkbox-input w-checkbox-input--inputType-custom form_checkbox-icon is-alternate"></div><input type="checkbox" name="Contact-2-Checkbox" id="Contact 2 Checkbox" data-name="Contact 2 Checkbox" required="" style="opacity:0;position:absolute;z-index:-1"><span for="Contact-2-Checkbox" class="form_checkbox-label w-form-label">J&#x27;accepte les Conditions</span>
@@ -1676,15 +1676,15 @@ document.addEventListener('DOMContentLoaded', function() {
           
           if (files.length > 0) {
             if (files.length === 1) {
-              fileText.textContent = `📷 1 fichier sélectionné`;
-              console.log('Updated to: 1 fichier sélectionné');
+              fileText.textContent = `📷 1 file selected`;
+              console.log('Updated to: 1 file selected');
             } else {
-              fileText.textContent = `📷 ${files.length} fichiers sélectionnés`;
-              console.log(`Updated to: ${files.length} fichiers sélectionnés`);
+              fileText.textContent = `📷 ${files.length} files selected`;
+              console.log(`Updated to: ${files.length} files selected`);
             }
           } else {
-            fileText.textContent = '📷 Choisir des fichiers';
-            console.log('Updated to: Choisir des fichiers');
+            fileText.textContent = '📷 Choose files';
+            console.log('Updated to: Choose files');
           }
         });
       } else {
