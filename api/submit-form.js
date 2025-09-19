@@ -49,18 +49,34 @@ export default async function handler(req, res) {
 
     const [fields, files] = await form.parse(req);
     
-    // Extract form fields
-    const fullName = fields['Contact-2-First-Name']?.[0];
-    const city = fields['Contact-2-Last-Name']?.[0];
-    const email = fields['Contact-2-Email-2']?.[0];
-    const phone = fields['Contact-2-Phone']?.[0];
-    const service = fields['Contact-2-Select']?.[0];
-    const budget = fields['Contact-2-Radio']?.[0];
-    const message = fields['Contact-2-Message']?.[0];
-    const recaptchaToken = fields['g-recaptcha-response']?.[0];
+    // Debug logging
+    console.log('Parsed fields:', fields);
+    console.log('Parsed files:', files);
+    
+    // Extract form fields - handle both single values and arrays
+    const fullName = Array.isArray(fields['Contact-2-First-Name']) ? fields['Contact-2-First-Name'][0] : fields['Contact-2-First-Name'];
+    const city = Array.isArray(fields['Contact-2-Last-Name']) ? fields['Contact-2-Last-Name'][0] : fields['Contact-2-Last-Name'];
+    const email = Array.isArray(fields['Contact-2-Email-2']) ? fields['Contact-2-Email-2'][0] : fields['Contact-2-Email-2'];
+    const phone = Array.isArray(fields['Contact-2-Phone']) ? fields['Contact-2-Phone'][0] : fields['Contact-2-Phone'];
+    const service = Array.isArray(fields['Contact-2-Select']) ? fields['Contact-2-Select'][0] : fields['Contact-2-Select'];
+    const budget = Array.isArray(fields['Contact-2-Radio']) ? fields['Contact-2-Radio'][0] : fields['Contact-2-Radio'];
+    const message = Array.isArray(fields['Contact-2-Message']) ? fields['Contact-2-Message'][0] : fields['Contact-2-Message'];
+    const recaptchaToken = Array.isArray(fields['g-recaptcha-response']) ? fields['g-recaptcha-response'][0] : fields['g-recaptcha-response'];
     
     // Extract uploaded files
     const uploadedFiles = files['Contact-2-Image'] || [];
+    
+    // Debug extracted values
+    console.log('Extracted values:', {
+      fullName,
+      city,
+      email,
+      phone,
+      service,
+      budget,
+      message,
+      uploadedFilesCount: uploadedFiles.length
+    });
 
     // Verify reCAPTCHA (optional for now)
     if (recaptchaToken && recaptchaToken !== 'no-recaptcha' && recaptchaToken !== 'recaptcha-error') {
