@@ -1417,6 +1417,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <!-- Multiple Image Upload Handler -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 Image upload script starting...');
       const container = document.getElementById('image-upload-container');
       const addButtonsContainer = document.getElementById('add-image-buttons');
       const selectedImagesDiv = document.getElementById('selected-images');
@@ -1424,18 +1425,28 @@ document.addEventListener('DOMContentLoaded', function() {
       const selectedFiles = [];
       const maxImages = 5;
       
+      console.log('🔍 Elements found:', {
+        container: !!container,
+        addButtonsContainer: !!addButtonsContainer,
+        selectedImagesDiv: !!selectedImagesDiv,
+        imageList: !!imageList
+      });
+      
       // Store selected files globally for form submission
       window.selectedFiles = selectedFiles;
       
       // Create hidden file inputs for each image
       function createFileInput() {
+        console.log('🔧 Creating file input...');
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'image/*';
         input.style.display = 'none';
         input.addEventListener('change', function(e) {
+          console.log('📁 File input changed:', e.target.files);
           const file = e.target.files[0];
           if (file) {
+            console.log('📄 File selected:', file.name, file.size);
             // Check file size (5MB max)
             if (file.size > 5 * 1024 * 1024) {
               alert('Le fichier est trop volumineux. Maximum 5MB par image.');
@@ -1450,6 +1461,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add file to our list
             selectedFiles.push(file);
+            console.log('✅ File added to list. Total files:', selectedFiles.length);
             updateDisplay();
             updateButtons();
           }
@@ -1493,12 +1505,24 @@ document.addEventListener('DOMContentLoaded', function() {
           
           // Add click handler to the button
           const addBtn = addButtonsContainer.querySelector('.add-image-btn');
-          addBtn.addEventListener('click', function() {
-            const input = createFileInput();
-            document.body.appendChild(input);
-            input.click();
-            document.body.removeChild(input);
-          });
+          if (addBtn) {
+            console.log('🔘 Adding click handler to button');
+            addBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+              console.log('🖱️ Add button clicked!');
+              const input = createFileInput();
+              document.body.appendChild(input);
+              input.click();
+              // Don't remove immediately, let the change event fire first
+              setTimeout(() => {
+                if (document.body.contains(input)) {
+                  document.body.removeChild(input);
+                }
+              }, 100);
+            });
+          } else {
+            console.error('❌ Add button not found!');
+          }
         } else {
           addButtonsContainer.innerHTML = '<span style="color: #666; font-style: italic;">Maximum de 5 images atteint</span>';
         }
