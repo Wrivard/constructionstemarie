@@ -270,22 +270,52 @@ export default async function handler(req, res) {
 
     // Prepare attachments if files were uploaded
     const attachments = [];
+    console.log('🔍 Processing uploaded files:', {
+      uploadedFilesCount: uploadedFiles.length,
+      uploadedFiles: uploadedFiles.map(f => ({
+        originalFilename: f?.originalFilename,
+        filepath: f?.filepath,
+        mimetype: f?.mimetype,
+        size: f?.size
+      }))
+    });
+    
     if (uploadedFiles && uploadedFiles.length > 0) {
       for (const file of uploadedFiles) {
+        console.log('📁 Processing file:', {
+          originalFilename: file?.originalFilename,
+          filepath: file?.filepath,
+          mimetype: file?.mimetype,
+          size: file?.size,
+          hasFilepath: !!file?.filepath
+        });
+        
         if (file && file.filepath) {
           try {
             const fileBuffer = fs.readFileSync(file.filepath);
+            console.log('✅ File read successfully, size:', fileBuffer.length);
             attachments.push({
               filename: file.originalFilename || `image_${Date.now()}.${file.mimetype?.split('/')[1] || 'jpg'}`,
               content: fileBuffer,
               contentType: file.mimetype || 'image/jpeg'
             });
           } catch (fileError) {
-            console.error('Error reading file:', fileError);
+            console.error('❌ Error reading file:', fileError);
           }
+        } else {
+          console.log('⚠️ File missing filepath:', file);
         }
       }
     }
+    
+    console.log('📎 Final attachments:', {
+      count: attachments.length,
+      attachments: attachments.map(a => ({
+        filename: a.filename,
+        contentType: a.contentType,
+        contentSize: a.content.length
+      }))
+    });
 
     const emailData = {
       from: fromEmail,
