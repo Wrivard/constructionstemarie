@@ -1740,25 +1740,9 @@ document.addEventListener('DOMContentLoaded', function() {
           formData.append('Contact-2-Image[]', file);
         });
         
-        // Add reCAPTCHA if available (optional - form works without it)
-        try {
-          if (window.grecaptcha && window.grecaptcha.execute) {
-            const recaptchaToken = await window.grecaptcha.execute('6Lf8-84rAAAAADnuAy_xIPIcJzKZKoazMADJyzmg', {action: 'submit'});
-            if (recaptchaToken) {
-              formData.append('g-recaptcha-response', recaptchaToken);
-              console.log('✅ reCAPTCHA token added');
-            } else {
-              formData.append('g-recaptcha-response', 'no-recaptcha');
-              console.log('⚠️ reCAPTCHA returned empty token, continuing without it');
-            }
-          } else {
-            formData.append('g-recaptcha-response', 'no-recaptcha');
-            console.log('⚠️ reCAPTCHA not available, continuing without it');
-          }
-        } catch (e) {
-          console.warn('⚠️ reCAPTCHA failed, continuing without it:', e.message);
-          formData.append('g-recaptcha-response', 'no-recaptcha');
-        }
+        // reCAPTCHA temporarily disabled - form works without it
+        formData.append('g-recaptcha-response', 'no-recaptcha');
+        console.log('ℹ️ reCAPTCHA disabled for now - form works without it');
         
         console.log('📋 Sending FormData with files');
         
