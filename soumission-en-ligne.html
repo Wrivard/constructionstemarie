@@ -1378,6 +1378,36 @@ document.addEventListener('DOMContentLoaded', function() {
   </script>
   <script src="https://www.google.com/recaptcha/api.js?render=6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg"></script>
   <script>
+    // Enhanced reCAPTCHA debugging
+    window.addEventListener('load', function() {
+      console.log('🔍 Page loaded, checking reCAPTCHA status...');
+      console.log('🔍 Current domain:', window.location.hostname);
+      console.log('🔍 Current URL:', window.location.href);
+      
+      setTimeout(() => {
+        console.log('🔍 After 2 seconds - grecaptcha status:', {
+          exists: typeof grecaptcha !== 'undefined',
+          ready: typeof grecaptcha !== 'undefined' ? typeof grecaptcha.ready : 'N/A',
+          execute: typeof grecaptcha !== 'undefined' ? typeof grecaptcha.execute : 'N/A'
+        });
+        
+        if (typeof grecaptcha !== 'undefined') {
+          grecaptcha.ready(() => {
+            console.log('✅ reCAPTCHA is ready for use!');
+            // Test a simple execution
+            grecaptcha.execute('6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg', {action: 'page_load'})
+              .then(token => {
+                console.log('✅ reCAPTCHA test execution successful! Token length:', token.length);
+              })
+              .catch(error => {
+                console.error('❌ reCAPTCHA test execution failed:', error);
+              });
+          });
+        }
+      }, 2000);
+    });
+  </script>
+  <script>
     // Test reCAPTCHA loading
     window.addEventListener('load', function() {
       console.log('🔍 Testing reCAPTCHA...');
