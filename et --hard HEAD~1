@@ -1,5 +1,0 @@
-[33m25af02a[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m Integrate Google Maps API across all pages
-[33m89d8141[m Temporarily hide testimonials sections across all pages
-[33m2192bbd[m Remove remaining image upload debug console logs
-[33ma332ac6[m Clean up debug console logs - production ready reCAPTCHA integration
-[33mac1dee3[m Update to new reCAPTCHA v3 keys - fresh start to resolve domain validation issues
