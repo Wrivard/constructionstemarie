@@ -1740,9 +1740,56 @@ document.addEventListener('DOMContentLoaded', function() {
           formData.append('Contact-2-Image[]', file);
         });
         
-        // reCAPTCHA temporarily disabled - form works without it
-        formData.append('g-recaptcha-response', 'no-recaptcha');
-        console.log('ℹ️ reCAPTCHA disabled for now - form works without it');
+        // Get reCAPTCHA v3 token
+        let recaptchaResponse;
+        try {
+          console.log('🔍 Starting reCAPTCHA verification...');
+          
+          // Wait for reCAPTCHA with better error handling
+          await new Promise((resolve, reject) => {
+            let attempts = 0;
+            const maxAttempts = 30; // 3 seconds max
+            
+            const checkRecaptcha = () => {
+              attempts++;
+              console.log(`🔍 Checking reCAPTCHA... attempt ${attempts}/30`);
+              
+              if (typeof grecaptcha !== 'undefined' && grecaptcha.ready) {
+                console.log('✅ reCAPTCHA found! Waiting for ready state...');
+                grecaptcha.ready(() => {
+                  console.log('✅ reCAPTCHA is ready!');
+                  resolve();
+                });
+              } else if (attempts >= maxAttempts) {
+                console.warn('⚠️ reCAPTCHA timeout after 3 seconds');
+                reject(new Error('reCAPTCHA timeout'));
+              } else {
+                setTimeout(checkRecaptcha, 100);
+              }
+            };
+            checkRecaptcha();
+          });
+          
+          if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
+            try {
+              console.log('🚀 Executing reCAPTCHA...');
+              recaptchaResponse = await grecaptcha.execute('6Lf8-84rAAAAADnuAy_xIPIcJzKZKoazMADJyzmg', {action: 'submit'});
+              console.log('✅ reCAPTCHA token received successfully!');
+            } catch (recaptchaError) {
+              console.warn('⚠️ reCAPTCHA execution failed:', recaptchaError);
+              recaptchaResponse = 'recaptcha-error';
+            }
+          } else {
+            throw new Error('reCAPTCHA execute function not available');
+          }
+        } catch (error) {
+          console.error('❌ reCAPTCHA error:', error);
+          recaptchaResponse = 'recaptcha-error';
+        }
+        
+        // Add reCAPTCHA response
+        formData.append('g-recaptcha-response', recaptchaResponse);
+        console.log('🔐 reCAPTCHA token added to form submission');
         
         console.log('📋 Sending FormData with files');
         
