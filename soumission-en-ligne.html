@@ -1422,7 +1422,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Simple function to add image
     function addImage() {
-      console.log('🖱️ Add image button clicked!');
       
       // Check if we already have max images
       if (window.selectedFiles.length >= maxImages) {
@@ -1439,7 +1438,6 @@ document.addEventListener('DOMContentLoaded', function() {
       input.onchange = function(e) {
         const file = e.target.files[0];
         if (file) {
-          console.log('📄 File selected:', file.name, file.size);
           
           // Check file size (5MB max)
           if (file.size > 5 * 1024 * 1024) {
