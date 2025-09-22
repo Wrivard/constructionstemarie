@@ -8,7 +8,7 @@
     <button onclick="testRecaptcha()">Test reCAPTCHA</button>
     <div id="result"></div>
 
-    <script src="https://www.google.com/recaptcha/api.js?render=6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lej0dErAAAAAGYthdc9nVOWE_0halHEuXCMyrLm"></script>
     <script>
         function testRecaptcha() {
             const resultDiv = document.getElementById('result');
@@ -20,7 +20,7 @@
             }
             
             grecaptcha.ready(() => {
-                grecaptcha.execute('6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg', {action: 'test'})
+                grecaptcha.execute('6Lej0dErAAAAAGYthdc9nVOWE_0halHEuXCMyrLm', {action: 'test'})
                     .then(token => {
                         resultDiv.innerHTML = '✅ reCAPTCHA works! Token: ' + token.substring(0, 20) + '...';
                     })

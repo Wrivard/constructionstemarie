@@ -1376,7 +1376,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   </script>
-  <script src="https://www.google.com/recaptcha/api.js?render=6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Lej0dErAAAAAGYthdc9nVOWE_0halHEuXCMyrLm"></script>
   <script>
     // Enhanced reCAPTCHA debugging
     window.addEventListener('load', function() {
@@ -1395,7 +1395,7 @@ document.addEventListener('DOMContentLoaded', function() {
           grecaptcha.ready(() => {
             console.log('✅ reCAPTCHA is ready for use!');
             // Test a simple execution
-            grecaptcha.execute('6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg', {action: 'page_load'})
+            grecaptcha.execute('6Lej0dErAAAAAGYthdc9nVOWE_0halHEuXCMyrLm', {action: 'page_load'})
               .then(token => {
                 console.log('✅ reCAPTCHA test execution successful! Token length:', token.length);
               })
@@ -1424,7 +1424,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
           console.log('🧪 Testing reCAPTCHA execute...');
           grecaptcha.ready(() => {
-            grecaptcha.execute('6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg', {action: 'test'})
+            grecaptcha.execute('6Lej0dErAAAAAGYthdc9nVOWE_0halHEuXCMyrLm', {action: 'test'})
               .then(token => {
                 console.log('✅ reCAPTCHA test successful! Token:', token.substring(0, 20) + '...');
               })
@@ -1624,7 +1624,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
             try {
               console.log('🚀 Executing reCAPTCHA...');
-              recaptchaResponse = await grecaptcha.execute('6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg', {action: 'submit'});
+              recaptchaResponse = await grecaptcha.execute('6Lej0dErAAAAAGYthdc9nVOWE_0halHEuXCMyrLm', {action: 'submit'});
               console.log('✅ reCAPTCHA token received successfully!');
             } catch (recaptchaError) {
               console.warn('⚠️ reCAPTCHA execution failed:', recaptchaError);
@@ -1803,7 +1803,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
             try {
               console.log('🚀 Executing reCAPTCHA...');
-              recaptchaResponse = await grecaptcha.execute('6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg', {action: 'submit'});
+              recaptchaResponse = await grecaptcha.execute('6Lej0dErAAAAAGYthdc9nVOWE_0halHEuXCMyrLm', {action: 'submit'});
               console.log('✅ reCAPTCHA token received successfully!');
             } catch (recaptchaError) {
               console.warn('⚠️ reCAPTCHA execution failed:', recaptchaError);
