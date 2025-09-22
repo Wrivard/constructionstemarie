@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA Debug Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>reCAPTCHA Debug Test</h1>
+    <div id="debug-output"></div>
+    <button onclick="testRecaptcha()" id="test-btn">Test reCAPTCHA</button>
+    
+    <script>
+        const SITE_KEY = '6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg';
+        const output = document.getElementById('debug-output');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `debug ${type}`;
+            div.innerHTML = message;
+            output.appendChild(div);
+            console.log(message);
+        }
+        
+        window.addEventListener('load', function() {
+            log(`🌐 Domain: ${window.location.hostname}`);
+            log(`🔗 URL: ${window.location.href}`);
+            log(`🔑 Site Key: ${SITE_KEY}`);
+            
+            // Check if reCAPTCHA script loads
+            setTimeout(() => {
+                if (typeof grecaptcha === 'undefined') {
+                    log('❌ reCAPTCHA script not loaded', 'error');
+                } else {
+                    log('✅ reCAPTCHA script loaded', 'success');
+                    
+                    grecaptcha.ready(() => {
+                        log('✅ reCAPTCHA ready', 'success');
+                        document.getElementById('test-btn').disabled = false;
+                    });
+                }
+            }, 2000);
+        });
+        
+        async function testRecaptcha() {
+            try {
+                log('🧪 Testing reCAPTCHA execution...');
+                
+                const token = await grecaptcha.execute(SITE_KEY, {action: 'test'});
+                log(`✅ SUCCESS! Token: ${token.substring(0, 50)}...`, 'success');
+                
+                // Test server verification
+                log('🔍 Testing server verification...');
+                const response = await fetch('/api/test-recaptcha', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    log(`✅ Server verification SUCCESS! Score: ${result.score}`, 'success');
+                } else {
+                    log(`❌ Server verification FAILED: ${result.error}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ reCAPTCHA execution FAILED: ${error.message}`, 'error');
+            }
+        }
+    </script>
+    
+    <!-- Load reCAPTCHA with your site key -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lf8-84rAAAAADnuAy_xlPlcJzKZKoazMADJyzmg"></script>
+</body>
+</html>
