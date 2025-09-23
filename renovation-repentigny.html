@@ -41,8 +41,41 @@
       'wait_for_update': 500
     });
     
-    // Check for existing consent and apply it (will be handled by cookie-utils.js when loaded)
-    // This will be processed after the cookie utilities are loaded
+    // Check for existing consent and apply it immediately
+    const checkExistingConsent = () => {
+      try {
+        const cookies = document.cookie.split("; ");
+        const consentCookie = cookies.find((cookie) => cookie.startsWith("cookie-consent="));
+        
+        if (consentCookie) {
+          const consentValue = consentCookie.split("=")[1];
+          const existingConsent = JSON.parse(decodeURIComponent(consentValue));
+          
+          // Apply consent settings immediately
+          gtag('consent', 'update', {
+            'analytics_storage': existingConsent.analytics ? 'granted' : 'denied',
+            'ad_storage': existingConsent.marketing ? 'granted' : 'denied',
+            'ad_user_data': existingConsent.marketing ? 'granted' : 'denied',
+            'ad_personalization': existingConsent.marketing ? 'granted' : 'denied',
+            'functionality_storage': existingConsent.functional ? 'granted' : 'denied',
+            'personalization_storage': existingConsent.functional ? 'granted' : 'denied',
+            'security_storage': 'granted'
+          });
+          
+          // Fire analytics consent event if analytics is granted
+          if (existingConsent.analytics) {
+            window.dataLayer.push({
+              'event': 'analytics_consent_granted'
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error checking existing consent:', error);
+      }
+    };
+    
+    // Check consent immediately
+    checkExistingConsent();
   </script>
   
   <script>

@@ -51,6 +51,11 @@ class GTMIntegration {
 
     // Listen for page changes (for SPAs)
     this.setupPageTracking();
+
+    // Track initial page view after a short delay to ensure GTM is loaded
+    setTimeout(() => {
+      this.trackPageView();
+    }, 1000);
   }
 
   loadGTMScript() {
@@ -141,7 +146,8 @@ class GTMIntegration {
   trackPageView() {
     if (typeof window.gtag !== 'function') return;
 
-    const existingConsent = window.CookieUtils ? window.CookieUtils.getCookieConsent() : null;
+    // Check for existing consent and apply it
+    const existingConsent = this.getExistingConsent();
     if (existingConsent) {
       this.applyConsentSettings(existingConsent);
     }
@@ -152,6 +158,21 @@ class GTMIntegration {
       'page_location': window.location.href,
       'page_path': window.location.pathname
     });
+  }
+
+  getExistingConsent() {
+    try {
+      const cookies = document.cookie.split("; ");
+      const consentCookie = cookies.find((cookie) => cookie.startsWith("cookie-consent="));
+      
+      if (consentCookie) {
+        const consentValue = consentCookie.split("=")[1];
+        return JSON.parse(decodeURIComponent(consentValue));
+      }
+    } catch (error) {
+      console.error('Error reading consent cookie:', error);
+    }
+    return null;
   }
 
   // Method to track custom events

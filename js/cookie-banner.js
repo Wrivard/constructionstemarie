@@ -80,6 +80,15 @@ class CookieBanner {
           'event': 'analytics_consent_granted'
         });
       }
+      
+      // Track page view after consent is granted
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'page_view', {
+          'page_title': document.title,
+          'page_location': window.location.href,
+          'page_path': window.location.pathname
+        });
+      }
     }
     
     this.showPreferences = false;
@@ -117,6 +126,15 @@ class CookieBanner {
       if (window.dataLayer) {
         window.dataLayer.push({
           'event': 'analytics_consent_granted'
+        });
+      }
+      
+      // Track page view after consent is granted
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'page_view', {
+          'page_title': document.title,
+          'page_location': window.location.href,
+          'page_path': window.location.pathname
         });
       }
     }
