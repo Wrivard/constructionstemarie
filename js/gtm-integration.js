@@ -5,7 +5,7 @@
 
 class GTMIntegration {
   constructor(gtmId = null) {
-    this.gtmId = gtmId || 'GTM-XXXXXXX'; // CHANGE: Replace with your GTM ID
+    this.gtmId = gtmId || 'GTM-TFMJVGLK'; // GTM Container ID
     this.init();
   }
 
@@ -178,7 +178,7 @@ window.gtmIntegration = null;
 // Initialize GTM Integration
 document.addEventListener('DOMContentLoaded', function() {
   // You can pass your GTM ID here or set it in the environment
-  const gtmId = window.GTM_ID || 'GTM-XXXXXXX'; // CHANGE: Replace with your actual GTM ID
+  const gtmId = window.GTM_ID || 'GTM-TFMJVGLK'; // GTM Container ID
   window.gtmIntegration = new GTMIntegration(gtmId);
 });
 
