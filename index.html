@@ -1621,7 +1621,10 @@ document.addEventListener('DOMContentLoaded', function() {
       if (message.includes('Permissions-Policy') || 
           message.includes('deprecated') ||
           message.includes('NoApiKeys') ||
-          message.includes('sensor=fal')) {
+          message.includes('sensor=fal') ||
+          message.includes('multiple times on this page') ||
+          message.includes('JavaScript API has been loaded directly without loading=async') ||
+          message.includes('best-practice loading patterns')) {
         return; // Don't log these warnings
       }
       originalWarn.apply(console, args);
@@ -1630,8 +1633,13 @@ document.addEventListener('DOMContentLoaded', function() {
     console.error = function(...args) {
       const message = args.join(' ');
       // Suppress specific errors that don't affect form functionality
-      if (message.includes('InvalidValueError') && message.includes('NaN')) {
-        return; // Don't log coordinate errors
+      if (message.includes('InvalidValueError') && message.includes('NaN') ||
+          message.includes('Permissions-Policy') ||
+          message.includes('Failed to load resource: net::ERR_BLOCKED_BY_CLIENT') ||
+          message.includes('MapsApiPropagatedError') ||
+          message.includes('Element with name') ||
+          message.includes('already defined')) {
+        return; // Don't log coordinate errors and common Maps errors
       }
       originalError.apply(console, args);
     };
