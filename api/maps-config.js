@@ -5,8 +5,8 @@ export default async function handler(req, res) {
   }
 
   // Get the API key from environment variables or use fallback
-  // Use the API key directly for immediate testing
-  const apiKey = 'AIzaSyDQ7P9ozNLmbeNK6WkiVjyiNSBjf8-LsCQ';
+  // Get the API key from environment variables
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   
   if (!apiKey) {
     return res.status(500).json({ error: 'Google Maps API key not configured' });
