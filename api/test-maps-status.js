@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY || 'AlzaSyCpMa49c3sFHy1Xegzzr6ctgs6Fsiwb-tg';
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyCpMa49c3sFHy1Xegzzr6ctgs6Fsiwb-tg';
   
   if (!apiKey) {
     return res.status(500).json({ 
