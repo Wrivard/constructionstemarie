@@ -1,50 +1,51 @@
-// Google Maps Embed API Integration
+// Simple Google Maps iframe error handler
 document.addEventListener('DOMContentLoaded', function() {
-  // Create static map embed for each map container
-  const mapContainers = document.querySelectorAll('.contact16_map-wrapper');
+  // Find all map iframes
+  const mapIframes = document.querySelectorAll('iframe.contact16_map');
   
-  mapContainers.forEach(function(container) {
-    // Check if there's already an iframe (our implementation) or a map div (original implementation)
-    const existingMap = container.querySelector('.contact16_map');
-    if (!existingMap) return;
+  // Add error handling for each iframe
+  mapIframes.forEach(function(iframe) {
+    iframe.onerror = function() {
+      showMapError(iframe);
+    };
     
-    // Get coordinates from the map element
-    let lat = 45.8506;
-    let lng = -73.8370;
-    
-    if (existingMap.hasAttribute('data-widget-latlng')) {
-      const latlng = existingMap.getAttribute('data-widget-latlng');
-      const coords = latlng.split(',').map(coord => parseFloat(coord.trim()));
-      if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
-        lat = coords[0];
-        lng = coords[1];
+    // Also check if iframe loaded correctly after a timeout
+    setTimeout(function() {
+      if (!isIframeLoaded(iframe)) {
+        showMapError(iframe);
       }
+    }, 5000); // 5 second timeout
+  });
+  
+  // Check if iframe loaded correctly
+  function isIframeLoaded(iframe) {
+    try {
+      // If we can access contentWindow, the iframe is probably loaded
+      return !!iframe.contentWindow;
+    } catch (e) {
+      // If we get an error, the iframe probably failed to load
+      return false;
     }
-    
-    // Get title and tooltip
-    const title = existingMap.getAttribute('title') || 'Construction Ste-Marie';
-    const tooltip = existingMap.getAttribute('data-widget-tooltip') || 'Construction Ste-Marie Inc.';
-    
-    // Create direct link to Google Maps as fallback
-    const mapUrl = `https://www.google.com/maps?q=${lat},${lng}`;
-    
-    // Create static map image with link
-    const mapHTML = `
-      <div class="contact16_map" style="width:100%; height:450px; position:relative; overflow:hidden;">
-        <a href="${mapUrl}" target="_blank" rel="noopener" style="display:block; width:100%; height:100%;">
-          <img 
-            src="https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=14&size=800x450&markers=color:red%7C${lat},${lng}&key=AIzaSyDQ7P9ozNLmbeNK6WkiVjyiNSBjf8-LsCQ" 
-            alt="${title}" 
-            style="width:100%; height:100%; object-fit:cover;"
-          />
-          <div style="position:absolute; bottom:10px; left:10px; background:white; padding:5px 10px; border-radius:3px;">
-            <strong>${title}</strong><br>${tooltip}
-          </div>
-        </a>
+  }
+  
+  // Show error message when map can't be loaded
+  function showMapError(iframe) {
+    const container = iframe.parentElement;
+    const errorDiv = document.createElement('div');
+    errorDiv.innerHTML = `
+      <div style="padding: 20px; background: #f8f9fa; color: #495057; border-radius: 8px; text-align: center; height: 450px; display: flex; flex-direction: column; justify-content: center;">
+        <h3>Carte non disponible</h3>
+        <p>Impossible de charger la carte Google Maps.</p>
+        <p>Veuillez réessayer plus tard ou nous contacter directement.</p>
+        <div style="margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 4px;">
+          <strong>Construction Ste-Marie</strong><br>
+          Saint-Roch-de-l'Achigan<br>
+          <a href="https://www.google.com/maps?q=45.8506,-73.8370" target="_blank" rel="noopener">
+            Voir sur Google Maps
+          </a>
+        </div>
       </div>
     `;
-    
-    // Replace the existing map with our static map
-    container.innerHTML = mapHTML;
-  });
+    container.replaceChild(errorDiv, iframe);
+  }
 });
