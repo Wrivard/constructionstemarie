@@ -4,8 +4,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Get the API key from environment variables or use the provided key
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyCpMa49c3sFHy1Xegzzr6ctgs6Fsiwb-tg';
+  // Get the API key from environment variables
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   
   if (!apiKey) {
     return res.status(500).json({ error: 'Google Maps API key not configured' });
