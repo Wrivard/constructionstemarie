@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     resendKeyLength: process.env.RESEND_API_KEY ? process.env.RESEND_API_KEY.length : 0,
     fromEmail: process.env.FROM_EMAIL,
     nodeEnv: process.env.NODE_ENV,
-    hardCodedBusinessEmail: 'wrivard@kua.quebec'
+    hardCodedBusinessEmail: 'charles.constructionsm@gmail.com'
   });
 
   try {
@@ -257,7 +257,7 @@ export default async function handler(req, res) {
     // Send email using Resend
     const fromEmail = process.env.FROM_EMAIL || 'onboarding@resend.dev';
     // Determine the correct business email (prioritize hard-coded over env var for this specific case)
-    const businessEmail = 'wrivard@kua.quebec'; // Business email - domain is verified in Resend
+    const businessEmail = 'charles.constructionsm@gmail.com'; // Business email - domain is verified in Resend
     
     // Log if there's an environment variable that might be interfering
     if (process.env.TO_EMAIL && process.env.TO_EMAIL !== businessEmail) {
@@ -466,7 +466,7 @@ export default async function handler(req, res) {
         to: email.trim(), // Send to the user's email (trimmed)
         subject: `✅ Confirmation de soumission - Construction Ste-Marie`,
         html: confirmationEmailContent,
-        replyTo: 'wrivard@kua.quebec'
+        replyTo: 'charles.constructionsm@gmail.com'
       });
 
       console.log('📧 Resend confirmation response:', JSON.stringify(confirmationResult, null, 2));

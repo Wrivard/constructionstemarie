@@ -249,7 +249,7 @@ app.post('/api/submit-form', upload.array('Contact-2-Image', 5), async (req, res
 
     const emailData = {
       from: process.env.FROM_EMAIL || 'noreply@constructionstemarie.ca',
-      to: 'wrivard@kua.quebec', // Hard-coded business email
+      to: 'charles.constructionsm@gmail.com', // Hard-coded business email
       subject: `🏗️ Nouveau Projet - ${fullName} (${city}) - Construction Ste-Marie`,
       html: emailContent,
       replyTo: email

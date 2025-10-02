@@ -9,7 +9,7 @@ const PORT = 3000;
 // IMPORTANT: Set RESEND_API_KEY in your environment variables
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = 'onboarding@resend.dev'; // Resend verified sender
-const TO_EMAIL = 'wrivard@kua.quebec'; // Business email
+const TO_EMAIL = 'charles.constructionsm@gmail.com'; // Business email
 const RECAPTCHA_SECRET_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe';
 
 console.log('🔑 Resend API Key:', RESEND_API_KEY ? 'Present' : 'Missing');
@@ -309,7 +309,7 @@ app.post('/api/submit-form', async (req, res) => {
           to: email, // User's email
           subject: `✅ Confirmation de soumission - Construction Ste-Marie`,
           html: confirmationEmailContent,
-          reply_to: 'wrivard@kua.quebec' // Business email for replies
+          reply_to: 'charles.constructionsm@gmail.com' // Business email for replies
         });
         
         console.log('✅ Email de confirmation envoyé:', confirmationResult);

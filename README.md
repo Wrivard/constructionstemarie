@@ -4,8 +4,8 @@
 
 **Construction Ste-Marie** is a professional website for a residential renovation contractor, built with Webflow and exported as a static website. The site showcases construction services, renovation projects, and provides online submission forms for potential clients.
 
-**Live Website:** [https://wrivard.github.io/constructionstemarie](https://wrivard.github.io/constructionstemarie)  
-**GitHub Repository:** [https://github.com/Wrivard/constructionstemarie](https://github.com/Wrivard/constructionstemarie)
+**Live Website:** [https://constructionstemarie.ca](https://constructionstemarie.ca)  
+**GitHub Repository:** [Your repository URL]
 
 ## 📁 Project Structure
 
@@ -202,7 +202,7 @@ npm run dev
 ### **1. GitHub Pages (Free)**
 - Enable in repository settings
 - Deploy from master branch
-- Available at: `https://wrivard.github.io/constructionstemarie`
+- Available at: `https://constructionstemarie.ca`
 
 ### **2. Netlify (Free Tier)**
 - Drag and drop deployment
