@@ -70,6 +70,6 @@ logs
 *.temp
 
 # Documentation files (keep local only)
-
 SETUP.md
 GITHUB_UPLOAD.md
+SEO_REPORT.md
