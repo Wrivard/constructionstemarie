@@ -1,4 +1,25 @@
 /* Force Vercel redeploy */
+
+/* Global fix for CSS Grid rendering artifacts - prevents angled lines across all sections */
+section[class*="section_"] {
+  overflow: hidden !important;
+  position: relative;
+  isolation: isolate;
+  contain: layout style paint;
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* Apply containment to all grid containers to prevent artifacts */
+[class*="_row"][class*="grid"],
+[class*="_grid"][class*="grid"],
+[class*="_list"][class*="grid"],
+.w-layout-grid {
+  overflow: hidden;
+  position: relative;
+  contain: layout;
+}
+
 :root {
   --color-scheme-1--background: var(--_primitives---colors--neutral-darkest);
   --_typography---font-styles--body: Montserrat, sans-serif;
