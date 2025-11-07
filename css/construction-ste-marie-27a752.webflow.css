@@ -2403,18 +2403,22 @@ figcaption {
 }
 
 .section_gallery5 {
-  overflow: hidden;
+  overflow: hidden !important;
   position: relative;
   isolation: isolate;
   border: none !important;
   outline: none !important;
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
+  contain: layout style paint;
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 .section_gallery5 * {
   border: none !important;
   outline: none !important;
+  background-image: none !important;
 }
 
 .section_gallery5 *::before,
@@ -2423,6 +2427,18 @@ figcaption {
   content: none !important;
   background: none !important;
   background-image: none !important;
+}
+
+.gallery5_component {
+  overflow: hidden !important;
+  position: relative;
+  contain: layout;
+}
+
+.gallery5_grid-list {
+  overflow: hidden !important;
+  position: relative;
+  contain: layout;
 }
 
 .contact16_item {
@@ -2453,6 +2469,10 @@ figcaption {
   grid-auto-columns: 1fr;
   align-items: start;
   display: grid;
+  overflow: hidden !important;
+  position: relative;
+  contain: layout;
+  transform: translateZ(0);
 }
 
 .contact16_map {
@@ -2467,6 +2487,40 @@ figcaption {
   height: 35rem;
   position: relative;
   overflow: hidden;
+}
+
+.section_contact16 {
+  overflow: hidden !important;
+  position: relative;
+  border: none !important;
+  outline: none !important;
+  isolation: isolate;
+  contain: layout style paint;
+  transform: translateZ(0);
+  will-change: auto;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.contact16_component {
+  overflow: hidden !important;
+  position: relative;
+  contain: layout;
+}
+
+.section_contact16 * {
+  border-top: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  background-image: none !important;
+}
+
+.section_contact16 *::before,
+.section_contact16 *::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  background-image: none !important;
 }
 
 .layout626_divider {
