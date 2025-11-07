@@ -2331,6 +2331,33 @@ figcaption {
 
 .section_cta27 {
   position: relative;
+  overflow: hidden !important;
+  isolation: isolate;
+  contain: layout style paint;
+  transform: translateZ(0);
+  will-change: auto;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.cta27_component {
+  overflow: hidden !important;
+  position: relative;
+  contain: layout;
+}
+
+.section_cta27 * {
+  border: none !important;
+  outline: none !important;
+  background-image: none !important;
+}
+
+.section_cta27 *::before,
+.section_cta27 *::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  background-image: none !important;
 }
 
 .faq2_answer {
@@ -2366,6 +2393,40 @@ figcaption {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+}
+
+.section_faq2 {
+  overflow: hidden !important;
+  position: relative;
+  border: none !important;
+  outline: none !important;
+  isolation: isolate;
+  contain: layout style paint;
+  transform: translateZ(0);
+  will-change: auto;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.faq2_component {
+  overflow: hidden !important;
+  position: relative;
+  contain: layout;
+}
+
+.section_faq2 * {
+  border-top: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  background-image: none !important;
+}
+
+.section_faq2 *::before,
+.section_faq2 *::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  background-image: none !important;
 }
 
 .gallery5_image {
