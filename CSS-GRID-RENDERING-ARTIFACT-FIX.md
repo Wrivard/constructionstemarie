@@ -36,9 +36,38 @@ The bug is caused by **CSS Grid rendering artifacts** from the `gallery5_row` gr
 
 The fix involves adding **CSS containment** and **overflow protection** to isolate the grid layout calculations and prevent visual artifacts from bleeding between sections.
 
-### CSS Fix
+### Global Fix (Recommended)
 
-Add the following CSS rules to prevent grid rendering artifacts:
+For a site-wide fix that prevents this issue across all sections, add this global CSS rule at the top of your stylesheet:
+
+```css
+/* Global fix for CSS Grid rendering artifacts - prevents angled lines across all sections */
+section[class*="section_"] {
+  overflow: hidden !important;
+  position: relative;
+  isolation: isolate;
+  contain: layout style paint;
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* Apply containment to all grid containers to prevent artifacts */
+.w-layout-grid {
+  overflow: hidden;
+  position: relative;
+  contain: layout;
+}
+```
+
+This global fix will:
+- Apply CSS containment to ALL sections with `section_` in their class name
+- Prevent grid artifacts from bleeding between any sections
+- Work automatically for all current and future sections
+- Eliminate the need to fix each section individually
+
+### Per-Section Fix (If Global Fix Doesn't Work)
+
+If you need to fix specific sections individually, add the following CSS rules:
 
 ```css
 /* Fix for gallery5 section - prevent grid artifacts */
