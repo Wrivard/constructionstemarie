@@ -2398,6 +2398,31 @@ figcaption {
   grid-row-gap: 2rem;
   grid-template-rows: auto;
   grid-template-columns: 1fr 1fr 1fr;
+  overflow: hidden;
+  position: relative;
+}
+
+.section_gallery5 {
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  border: none !important;
+  outline: none !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.section_gallery5 * {
+  border: none !important;
+  outline: none !important;
+}
+
+.section_gallery5 *::before,
+.section_gallery5 *::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  background-image: none !important;
 }
 
 .contact16_item {
