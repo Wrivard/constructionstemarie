@@ -1,8 +1,8 @@
 /* Force Vercel redeploy */
 
 /* Global fix for CSS Grid rendering artifacts - prevents angled lines across all sections */
+/* This applies CSS containment to all sections to prevent grid rendering artifacts from bleeding between sections */
 section[class*="section_"] {
-  overflow: hidden !important;
   position: relative;
   isolation: isolate;
   contain: layout style paint;
@@ -10,12 +10,8 @@ section[class*="section_"] {
   will-change: auto;
 }
 
-/* Apply containment to all grid containers to prevent artifacts */
-[class*="_row"][class*="grid"],
-[class*="_grid"][class*="grid"],
-[class*="_list"][class*="grid"],
+/* Apply containment to all Webflow grid containers to prevent artifacts */
 .w-layout-grid {
-  overflow: hidden;
   position: relative;
   contain: layout;
 }

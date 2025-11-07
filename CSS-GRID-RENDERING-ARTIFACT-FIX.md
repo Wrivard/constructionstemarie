@@ -36,14 +36,14 @@ The bug is caused by **CSS Grid rendering artifacts** from the `gallery5_row` gr
 
 The fix involves adding **CSS containment** and **overflow protection** to isolate the grid layout calculations and prevent visual artifacts from bleeding between sections.
 
-### Global Fix (Recommended)
+### Global Fix (Recommended - Best Practice)
 
-For a site-wide fix that prevents this issue across all sections, add this global CSS rule at the top of your stylesheet:
+**✅ RECOMMENDED APPROACH**: For a site-wide fix that prevents this issue across all sections, add this global CSS rule at the top of your stylesheet:
 
 ```css
 /* Global fix for CSS Grid rendering artifacts - prevents angled lines across all sections */
+/* This applies CSS containment to all sections to prevent grid rendering artifacts from bleeding between sections */
 section[class*="section_"] {
-  overflow: hidden !important;
   position: relative;
   isolation: isolate;
   contain: layout style paint;
@@ -51,19 +51,36 @@ section[class*="section_"] {
   will-change: auto;
 }
 
-/* Apply containment to all grid containers to prevent artifacts */
+/* Apply containment to all Webflow grid containers to prevent artifacts */
 .w-layout-grid {
-  overflow: hidden;
   position: relative;
   contain: layout;
 }
 ```
 
-This global fix will:
-- Apply CSS containment to ALL sections with `section_` in their class name
-- Prevent grid artifacts from bleeding between any sections
-- Work automatically for all current and future sections
-- Eliminate the need to fix each section individually
+**Why the Global Fix is Better:**
+- ✅ **Prevents the bug site-wide** - Works for all current and future sections automatically
+- ✅ **Less maintenance** - No need to fix each section individually
+- ✅ **Consistent behavior** - All sections use the same containment rules
+- ✅ **Future-proof** - Automatically applies to new sections you add
+- ✅ **Safe to use** - CSS containment is a standard, well-supported property
+- ✅ **Performance-friendly** - Can actually improve rendering performance by isolating layout calculations
+
+**Is it Dangerous?**
+- ❌ **No, it's safe** - CSS containment (`contain: layout style paint`) is a standard CSS property designed for this exact purpose
+- ❌ **No clipping issues** - We removed `overflow: hidden !important` from the global fix to avoid clipping legitimate content
+- ❌ **No performance impact** - The containment can actually improve performance by isolating layout calculations
+- ⚠️ **Minor consideration** - `transform: translateZ(0)` forces hardware acceleration, which has minimal performance overhead but is generally beneficial
+
+**When to Use Global Fix:**
+- ✅ Use when you have multiple sections that could be affected
+- ✅ Use for new projects to prevent the issue from the start
+- ✅ Use when you want a consistent, maintainable solution
+
+**When to Use Per-Section Fix:**
+- ⚠️ Only use if the global fix causes unexpected issues with specific sections
+- ⚠️ Use if you need more granular control over specific sections
+- ⚠️ Use if you're working with legacy code that can't be modified globally
 
 ### Per-Section Fix (If Global Fix Doesn't Work)
 
