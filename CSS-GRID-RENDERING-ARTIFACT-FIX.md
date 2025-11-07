@@ -10,6 +10,7 @@ A thin, diagonal line appears across the contact section on certain pages, parti
 - Sometimes appears as two lines
 - Only appears on pages that have a `section_gallery5` (gallery section) before the contact section
 - Does NOT appear on pages without the gallery section before the contact section
+- **Also appears in FAQ sections** on renovation pages (renovation-laval, renovation-terrebonne, etc.) where `section_cta27` appears before `section_faq2`
 
 ## Root Cause
 
@@ -27,8 +28,9 @@ The bug is caused by **CSS Grid rendering artifacts** from the `gallery5_row` gr
    - Grid gaps and column boundaries don't align perfectly
 
 4. **Why It Only Appears on Some Pages**: 
-   - Pages with `section_gallery5` before `section_contact16` → **Line appears**
-   - Pages without `section_gallery5` before `section_contact16` → **No line**
+   - Pages with `section_gallery5` before `section_contact16` → **Line appears in contact section**
+   - Pages without `section_gallery5` before `section_contact16` → **No line in contact section**
+   - Pages with `section_cta27` before `section_faq2` → **Line appears in FAQ section** (renovation pages)
 
 ## Solution
 
@@ -136,6 +138,73 @@ Add the following CSS rules to prevent grid rendering artifacts:
   background: none !important;
   background-image: none !important;
 }
+
+/* Fix for CTA section - prevent artifacts from bleeding into FAQ section */
+.section_cta27 {
+  position: relative;
+  overflow: hidden !important;
+  isolation: isolate;
+  contain: layout style paint;
+  transform: translateZ(0);
+  will-change: auto;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.cta27_component {
+  overflow: hidden !important;
+  position: relative;
+  contain: layout;
+}
+
+.section_cta27 * {
+  border: none !important;
+  outline: none !important;
+  background-image: none !important;
+}
+
+.section_cta27 *::before,
+.section_cta27 *::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+/* Fix for FAQ section - prevent artifacts from bleeding in */
+.section_faq2 {
+  overflow: hidden !important;
+  position: relative;
+  border: none !important;
+  outline: none !important;
+  isolation: isolate;
+  contain: layout style paint;
+  transform: translateZ(0);
+  will-change: auto;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.faq2_component {
+  overflow: hidden !important;
+  position: relative;
+  contain: layout;
+}
+
+.section_faq2 * {
+  border-top: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  background-image: none !important;
+}
+
+.section_faq2 *::before,
+.section_faq2 *::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  background-image: none !important;
+}
 ```
 
 ## Key CSS Properties Explained
@@ -165,7 +234,7 @@ Add the following CSS rules to prevent grid rendering artifacts:
 1. **Visual Check**: Look for thin, diagonal lines that appear across sections
 2. **DevTools Check**: Try to click/inspect the line - if it can't be selected, it's likely a rendering artifact
 3. **Viewport Check**: Resize the browser window - the line typically appears when not fullscreen
-4. **Page Comparison**: Check if the line appears on pages with grid sections before the contact section
+4. **Page Comparison**: Check if the line appears on pages with grid sections before the affected section (contact or FAQ)
 
 ## Prevention Tips
 
