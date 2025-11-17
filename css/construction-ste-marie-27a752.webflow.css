@@ -2440,7 +2440,7 @@ figcaption {
 
 /* Explicitly allow border on accordion for dividers */
 .section_faq2 .faq2_accordion {
-  border-bottom: initial !important;
+  border-bottom: unset !important;
 }
 
 .section_faq2 *::before {
