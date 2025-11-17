@@ -2410,11 +2410,6 @@ figcaption {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  border-bottom: var(--_ui-styles---stroke--divider-width) solid var(--color-scheme-1--border);
-}
-
-.faq2_accordion:last-child {
-  border-bottom: none;
 }
 
 .section_faq2 {
@@ -2449,6 +2444,15 @@ figcaption {
   content: none !important;
   background: none !important;
   background-image: none !important;
+}
+
+/* Add dividers between FAQ questions - override the border removal rule */
+.faq2_accordion {
+  border-bottom: var(--_ui-styles---stroke--divider-width) solid var(--color-scheme-2--border) !important;
+}
+
+.faq2_accordion:last-child {
+  border-bottom: none !important;
 }
 
 .gallery5_image {
