@@ -2452,24 +2452,9 @@ figcaption {
   background-image: none !important;
 }
 
-/* Add dividers between FAQ accordion items */
+/* Add dividers between FAQ accordion items - simple border approach */
 .section_faq2 .faq2_list .faq2_accordion:not(:last-child) {
-  position: relative !important;
-  padding-bottom: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-.section_faq2 .faq2_list .faq2_accordion:not(:last-child)::after {
-  content: '' !important;
-  display: block !important;
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: 2px !important;
-  background-color: rgba(255, 255, 255, 0.3) !important;
-  width: 100% !important;
-  background-image: none !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 .gallery5_image {
