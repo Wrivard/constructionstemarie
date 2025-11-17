@@ -2431,7 +2431,7 @@ figcaption {
   contain: layout;
 }
 
-.section_faq2 *:not(.faq2_question) {
+.section_faq2 *:not(.faq2_question):not(.faq2_accordion) {
   border-top: none !important;
   border-bottom: none !important;
   outline: none !important;
