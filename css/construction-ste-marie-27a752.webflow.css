@@ -2438,8 +2438,14 @@ figcaption {
   background-image: none !important;
 }
 
-.section_faq2 *::before,
-.section_faq2 *::after {
+.section_faq2 *::before {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+.section_faq2 *:not(.faq2_accordion)::after {
   display: none !important;
   content: none !important;
   background: none !important;
