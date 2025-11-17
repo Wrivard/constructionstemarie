@@ -2410,6 +2410,11 @@ figcaption {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  border-bottom: var(--_ui-styles---stroke--divider-width) solid var(--color-scheme-1--border);
+}
+
+.faq2_accordion:last-child {
+  border-bottom: none;
 }
 
 .section_faq2 {
