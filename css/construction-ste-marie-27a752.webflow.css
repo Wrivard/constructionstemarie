@@ -2446,21 +2446,9 @@ figcaption {
   background-image: none !important;
 }
 
-/* Add dividers between FAQ questions - override the border removal rule */
-/* Add divider right after each question element - use more specific selector to override */
-.section_faq2 .faq2_question::after {
-  content: '' !important;
-  display: block !important;
-  height: 1px !important;
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  width: 100% !important;
-  margin-top: 1.25rem !important;
-  margin-bottom: 0 !important;
-  position: relative !important;
-}
-
-.section_faq2 .faq2_accordion:last-child .faq2_question::after {
-  display: none !important;
+/* Add dividers between FAQ questions - override border removal with maximum specificity */
+.section_faq2 .faq2_list .faq2_accordion:not(:last-child) .faq2_question {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 .gallery5_image {
