@@ -2431,16 +2431,11 @@ figcaption {
   contain: layout;
 }
 
-.section_faq2 * {
+.section_faq2 *:not(.faq2_question) {
   border-top: none !important;
   border-bottom: none !important;
   outline: none !important;
   background-image: none !important;
-}
-
-/* Allow borders on FAQ questions for dividers - override the border removal */
-.section_faq2 .faq2_question {
-  border-bottom: unset !important;
 }
 
 .section_faq2 *::before,
@@ -2454,6 +2449,7 @@ figcaption {
 /* Add dividers between FAQ questions */
 .section_faq2 .faq2_list .faq2_accordion:not(:last-child) .faq2_question {
   border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
+  padding-bottom: 1.25rem !important;
 }
 
 .gallery5_image {
