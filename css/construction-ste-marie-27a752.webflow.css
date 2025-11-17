@@ -2438,6 +2438,11 @@ figcaption {
   background-image: none !important;
 }
 
+/* Explicitly allow border on accordion for dividers */
+.section_faq2 .faq2_accordion {
+  border-bottom: initial !important;
+}
+
 .section_faq2 *::before {
   display: none !important;
   content: none !important;
@@ -2452,7 +2457,7 @@ figcaption {
   background-image: none !important;
 }
 
-/* Add dividers between FAQ accordion items - simple border approach */
+/* Add dividers between FAQ accordion items */
 .section_faq2 .faq2_list .faq2_accordion:not(:last-child) {
   border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
